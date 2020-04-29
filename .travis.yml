@@ -1,5 +1,6 @@
 dist: bionic
 env:
+ global:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
   - sudo apt-get update
