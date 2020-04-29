@@ -15,9 +15,9 @@ cache:
     - vendor
 before_script:
   - cp .env.example .env
-  - sudo mysql -u 'CREATE DATABASE laravel;'
-  - sudo mysql -u "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
-  - sudo mysql -u "GRANT ALL ON laravel.* TO 'keller'@'localhost';"
+  - sudo mysql -e 'CREATE DATABASE laravel;'
+  - sudo mysql -e "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
+  - sudo mysql -e "GRANT ALL ON laravel.* TO 'keller'@'localhost';"
   - composer self-update
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
   - php artisan key:generate
