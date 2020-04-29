@@ -1,10 +1,7 @@
 dist: bionic
-git:
-  submodules:
-    false
 before_install:
-  - echo -e "machine bitbucket.org\n  login $BITBUCKET_USER_NAME\n  password $BITBUCKET_USER_PASSWORD" >~/.netrc
-  - git submodule update --init --recursive
+  - sudo apt-get update
+  - sudo apt-get -y install libxml2-dev
 language: php
 php:
   - 7.4
