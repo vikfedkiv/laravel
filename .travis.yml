@@ -3,9 +3,7 @@ env:
  global:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
-  - composer config -g repositories.packagist path $(pwd)
-  - composer global require 'hirak/prestissimo:@dev'
-  - composer config -g --unset repositories.packagist
+  - composer global require hirak/prestissimo
 language: php
 php:
   - 7.4
