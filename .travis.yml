@@ -4,7 +4,7 @@ env:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
   - sudo apt-get update
-  - sudo LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
+  - sudo LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
   - sudo apt-get update
   - sudo apt-get install -y software-properties-common
   - sudo apt-get install -y --no-install-recommends php7.4-cli php7.4-dev php7.4-pgsql php7.4-sqlite3 php7.4-gd
