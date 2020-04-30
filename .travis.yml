@@ -4,13 +4,15 @@ env:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
   - composer global require hirak/prestissimo
+  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-amd64.deb
+  - sudo dpkg -i --force-confnew elasticsearch-7.1.0-amd64.deb
+  - sudo service elasticsearch restart
 language: php
 php:
   - 7.4
 services:
   - mysql
   - docker
-  - elasticsearch
 cache:
   directories:
     - node_modules
