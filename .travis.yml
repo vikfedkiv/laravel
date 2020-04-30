@@ -10,10 +10,12 @@ php:
 services:
   - mysql
   - docker
+  - elasticsearch
 cache:
   directories:
     - node_modules
 before_script:
+  - until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
   - cp .env.example .env
   - sudo mysql -e 'CREATE DATABASE laravel;'
   - sudo mysql -e "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
@@ -25,8 +27,8 @@ before_script:
 script:
   - vendor/bin/phpunit
 after_success:
-  - docker --version
-  - pip install --user awscli
-  - export PATH=$PATH:$HOME/.local/bin
-  - eval $(aws ecr get-login --no-include-email --region us-west-2)
-  - docker pull 963713796187.dkr.ecr.us-west-2.amazonaws.com/pipeline/minio:latest
+        #  - docker --version
+        #  - pip install --user awscli
+        #  - export PATH=$PATH:$HOME/.local/bin
+        #  - eval $(aws ecr get-login --no-include-email --region us-west-2)
+        #  - docker pull 963713796187.dkr.ecr.us-west-2.amazonaws.com/pipeline/minio:latest
