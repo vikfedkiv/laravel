@@ -3,6 +3,9 @@ env:
  global:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade -u root -p123123
+  - sudo service mysql restart
   - composer global require hirak/prestissimo
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-amd64.deb
   - sudo dpkg -i --force-confnew elasticsearch-7.1.0-amd64.deb
@@ -23,7 +26,6 @@ cache:
 before_script:
   - until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
   - cp .env.example .env
-  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | sudo mysql -u root
   - sudo mysql -uroot -proot -e 'CREATE DATABASE laravel;'
   - sudo mysql -uroot -proot -e "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
   - sudo mysql -uroot -proot -e "GRANT ALL ON laravel.* TO 'keller'@'localhost';"
