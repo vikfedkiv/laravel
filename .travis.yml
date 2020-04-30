@@ -13,7 +13,6 @@ services:
 cache:
   directories:
     - node_modules
-    - vendor
 before_script:
   - cp .env.example .env
   - sudo mysql -e 'CREATE DATABASE laravel;'
