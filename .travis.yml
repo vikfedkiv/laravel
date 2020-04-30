@@ -33,6 +33,7 @@ before_script:
   - php artisan migrate
 script:
   - vendor/bin/phpunit
+  - sh/pipeline/backend_db_clone.sh
 after_success:
         #  - docker --version
         #  - pip install --user awscli
