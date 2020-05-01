@@ -48,8 +48,11 @@ before_script:
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
   - php artisan key:generate
   - php artisan migrate
-script:
-  - vendor/bin/phpunit
-  - sh/pipeline/backend_db_clone.sh
+jobs:
+  include:
+    - stage: test
+      script: vendor/bin/phpunit
+    - stage: deploy
+      script: sh/pipeline/backend_db_clone.sh
 after_success:
   - docker --version
