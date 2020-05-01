@@ -50,9 +50,10 @@ before_script:
   - php artisan migrate
 jobs:
   include:
-    - stage: test
+    - stage: Test
+      name: "Unit test"
       script: vendor/bin/phpunit
-    - stage: deploy
-      script: sh/pipeline/backend_db_clone.sh
+    - script: sh/pipeline/backend_db_clone.sh
+      name: "Clone db"
 after_success:
   - docker --version
