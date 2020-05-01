@@ -8,7 +8,7 @@ before_install:
   - sudo service mysql restart
   - composer global require hirak/prestissimo
   - sudo apt-get update
-  - sudo apt-get install -y supervisor
+  - sudo apt-get install -y supervisor python3
   - sudo cp /home/travis/build/vikfedkiv/laravel/docs/docker/config/php/docker/config/supervisord.conf /etc/supervisor/supervisord.conf
   - sudo service supervisor start
   - sudo supervisorctl update
