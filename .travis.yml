@@ -10,8 +10,9 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install -y supervisor
   - sudo cp /home/travis/build/vikfedkiv/laravel/docs/docker/config/php/docker/config/supervisord.conf /etc/supervisor/supervisord.conf
-  - sudo supervisorctl update -c /etc/supervisor/supervisord.conf
-  - sudo supervisorctl status -c /etc/supervisor/supervisord.conf
+  - sudo service supervisor start
+  - sudo supervisorctl update
+  - sudo supervisorctl status
     #  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-amd64.deb
     #  - sudo dpkg -i --force-confnew elasticsearch-7.1.0-amd64.deb
     #  - sudo sed -i.old 's/-Xms1g/-Xms128m/' /etc/elasticsearch/jvm.options
