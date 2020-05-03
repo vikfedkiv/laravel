@@ -1,4 +1,9 @@
 dist: bionic
+addons:
+  artifacts:
+    s3_region: "us-west-2"
+    paths:
+    - /home/travis/build/vikfedkiv/laravel/storage/logs/laravel.log
 env:
  global:
   - DEBIAN_FRONTEND=noninteractive
