@@ -66,6 +66,7 @@ jobs:
     - script:
         - echo "frontend test 1"
         - echo "frontend test 2"
+        - fhajsfhkaj
       name: "Frontend Tests"
 after_success:
   - docker --version
