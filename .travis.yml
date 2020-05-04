@@ -1,9 +1,9 @@
 dist: bionic
-addons:
-  artifacts:
-    s3_region: "us-west-2"
-    paths:
-    - /home/travis/build/vikfedkiv/laravel/storage/logs/
+#addons:
+#  artifacts:
+#    s3_region: "us-west-2"
+#    paths:
+#    - /home/travis/build/vikfedkiv/laravel/storage/logs/
 env:
  global:
   - DEBIAN_FRONTEND=noninteractive
@@ -53,8 +53,19 @@ before_script:
   - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
   - php artisan key:generate
   - php artisan migrate
-script:
-  - vendor/bin/phpunit
-  - cp .env.example storage/logs/example.file
+    #script:
+    #  - vendor/bin/phpunit
+    #  - cp .env.example storage/logs/example.file
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Backend Tests"
+      script:
+        - echo "backend test 1"
+        - echo "backend test 2"
+    - script:
+        - echo "frontend test 1"
+        - echo "frontend test 2"
+      name: "Frontend Tests"
 after_success:
   - docker --version
