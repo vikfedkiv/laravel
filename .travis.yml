@@ -68,5 +68,9 @@ jobs:
         - echo "frontend test 2"
         - fhajsfhkaj
       name: "Frontend Tests"
+    - stage: "Deploy"
+      name: "Deploy to staging"
+      script:
+        - echo "Run deploy script"
 after_success:
   - docker --version
