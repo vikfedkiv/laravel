@@ -1,7 +1,15 @@
 dist: bionic
+addons:
+  apt:
+    packages:
+      - sshpass
 env:
   global:
   - DEBIAN_FRONTEND=noninteractive
+  - secure: A/dlRNS9ZoWJAZsFAOLMs4xtyAoQO0X2NeR6heyOyh1zPoxjtzeCxc8yzpI7WKvMCOA6x1e8YeyukaQxqYicsZxs5WlK23IVDOVPkHYmEcGJ7GTu7UG9jluspfMhKsdZJW4Q27nwWfTkLX4zI3rYtWcGuHRjKH/Y5TCk076e5BSWTahBGKZ+JGPtpjr2vp85vlU9LVMzkYiYgUKRR0XJ4pZ/rvt3aWZa5ybB/IliW0PNfzR08j/SGklmXq1W8zX0VTXyQzf6VwGaMrR26OtQNLQB//Ng9TFYSiJJSaW11pEGfzJ5QuQ6lKt11StWXS7vAiVpanq5qCoYl27GVNIiyHXDmKKs7m9lSSP8U/lav07xSTaDyR2oeG1j85cWpVRCl7qTm3Z0vyjxPD0K/6lGkS+Tat5GCh2sxNIIqjUXGvHq6q8DdP1pnFcCWEogungqwsf27TUALOn2L+g7FnwyhZw4pirbhlhkLFu40bweF5n7vfyZrcK3Eblj/USO8buY4MThkV3FFa8ApgUU1AAHIeI3Ap5DqeE65kQkQ1LKNLtMFEYyh+mcKw+wNjpjk4zGeBjaSvKUnJUFeIxgcvDvyiscprdOyHpLaeYcioCg7UlZ1uccBl0Su5Sg0iaBtKhNnCzlcF9NjV8EGh3MBgcABhOITqq1/nW+aiSwqQD3Y/E=
+  - secure: ePoe0yZ7xl7fyQ5Bl8ZAxiDmqmO1CD7jq83nWnCguDrOQSfIG9riajI14fFHjmFRjRPqUFziUucwbvs95sdsjKC/ulEE4aAhhx8eG/Ww3eMGyFEoBBRvuv2Gtl+qkrK/3keByY1Mdovj0MaJuV+wW3esQ81c5ZlzPVM+EsSk69F/BYXDrNMBEyIUgNkmhJZT/swtXv1qSpcSWtLDkj1XVG3/o4fYLeYGEv9zB3RguI/2OJHAgg3HKe9m5AGKu6Tv47oWmCfD/64OKwhGTMdr/CrH3Bd6Bnn/DUmX/yUmWZlcpHOZor06f8GEfzBqVFTdbRSYiWTAh7Otvldgy8KRICMfXpId5/2bSJZQvpBUSF4a5Q+un9N0RsZSz9KquanTgRRLp3/z4zKtV7Z/DwDpNBAxEXWmlpdhNddyV9eDul/QyEF+MHM3ciWiO3bjXYmWy1VzP8YITYh2XI3UGaC2KiOMNdEf2cbLh9SQn/vJoNBx8qO+hfQ6ENEWc6FDncvjGtZypNPzXOne6BiQ7NEgnBWdswRqXAY67KgL2m//4pQddJ4fAwg7Q2O2Xjd4foEH075dbAIRqy9GLcR7cKbJbzRLucuxWd7Z+xo1qmoJlXL6WW/2WcwTeTuB9c3VDH4DkjVI2NROO78HWN8iXnSi+fHCCUVS2l/Bj9iFaVvNS8A=
+  - secure: DNmt9BcaQ59aa8CRLsbhabYgW1Ax4X6/AvN/s6lXtEnIH3vztRQPMyh3+vA5qf0/FEwMnZbbo77W15KsAe/c7zlH4n+ZTTbs4uerdB1YgdAkHyuQSmUb5tJf2oiHzHYxjY/OCBOb+gKTf1IFQTWWZUwtlinR99sgdR2H7MJltqV5h9S8uLi77OvFUMCN5jCDopL3zC5wRGmEyYVC1obj9sSPKYDnLAJ7WtUVox2HYGS1bhxFK/IV4VztD1XpNvPZjYlwOhUQP6LqyZdNBQT3H2wYdkZrJHayH97F0IJ+MehvoMNAFkTZqaStfQG88CVYHzAFamT/5Zny7NWB4QD1u9js5ca6/WqyCJ2BclcXGJo6+I7fc7QxG2Q6TLLHtsV8mepc77RlVqH7iA2P5/RhorSx0d1YLf/GaD8LuwKRpmdTGSacgPZLDi7tTRI5MloJArrqcfsHRIJIFBmhHcoqncABeT2lDwvwHOZqFZX8IQTTsNuBYWe5bsO0N7Gbw5fiMx4B5wQVYe8gUnJSBtOdFbku+W8GgWoTeuCmGu+1HZU+ZAlA9tX0g8DEyaZSXfWFK2TN49WVniuxRSG5N3NNKoXak4/CS/SigU/yCT0EFtgKElKgvClxsUB/DSc3+zbFJ9gDViLxOhajN3oECQFEDIWZyZhwSkn9K3FzHaSvaXc=
+  - secure: PwSN2DckBNRCcvtG8vFKCYEp/gHJsLfmTXeh4oY/X9LDZn8Y6+JfyaejJ1cUrbje7EOuSelaNbxI/yk1s2xCdN8xyCDFxqQaOadPsF0fx53tpPkwllmwoi7f/zRpLa3kG6CmHQBLzeNt1BuDSYKc4jgISwH9phayqNP+9A+AtWOZkcam/HkzVxrCj0cSU+ZSigDmTu9jSjyHb79CZwt6ebx/isT0r3BGKdipLpbIcWbX17K1DNz5uQfETUHnhY39mjStr3hUy43kjn2cSEa2sedHvj6ocumKSRVjDravnZF+lIkz8TQrSnr8sSm63jkFZFZqhvMU475XGwQ29GFquRV4dnPLxI3JnqzVgt6dYoiSCwLN6SOIazeAp1V8Uw3cArg09mTdZsQd+VUJ8fXO5jH4tC2HAIhlUx/cA58Vzq3aTr5g7ax2JmrW/BQuiWHecEDI8oYTnxsa/bG/cDWuelEP6gBe+YR1fYSInGjo6UkWH6JdnbDgBYduVhQ39UFVK1mPgpkZ6V/CZBCg3j0NT5QLBeh6qNQHM7sWR3XidKzepGrwa4Ba7MwPuiPgMglU2o1uHIlz5szCLrABOT77Uwifd20EK2huJ4x/yEMrFuEgaQ/TEFe2ZrBQmEJOGligb8U9tCWVnBGUUurt5BOrpqcInnu956hwJRCUcHojlpI=
 before_install:
 - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
   -in deploy_key.enc -out ./deploy_key -d
@@ -47,12 +55,11 @@ jobs:
     name: Deploy to staging
     install: skip
     script:
-            #    - ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello World!"
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH"
+      ; fi
     - sed -i "s#CDN_URL=.*#CDN_URL=$CDN_LINK#g" .env.example
     - sed -i "s#APP_ENV=.*#APP_ENV=$TRAVIS_BRANCH#g" .env.example
-    - echo "$(cat .env.example | grep CDN_URL)" > test.log
-    - cat test.log
-
+    - export SSHPASS=$DEPLOY_PASS
+    - sshpass -e scp server.php $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
 after_success:
 - docker --version
