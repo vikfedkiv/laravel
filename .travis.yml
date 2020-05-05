@@ -7,6 +7,9 @@ env:
   global:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
+- pyenv global 3.7.1
+- pip install -U pip
+- pip install awscli
 - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
   -in deploy_key.enc -out ./deploy_key -d
 - eval "$(ssh-agent -s)"
