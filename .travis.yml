@@ -12,6 +12,8 @@ before_install:
   - sudo mysql_upgrade -u root -proot
   - sudo service mysql restart
   - composer global require hirak/prestissimo
+  - echo 'KEY' >> $HOME/.ssh/id_rsa.pub
+  - chmod 600 $HOME/.ssh/id_rsa.pub
     #  - sudo apt-get update
     #  - sudo apt-get install -y supervisor python3
     #  - sudo cp /home/travis/build/vikfedkiv/laravel/docs/docker/config/php/docker/config/supervisord.conf /etc/supervisor/supervisord.conf
@@ -70,6 +72,7 @@ jobs:
     - stage: "Deploy"
       name: "Deploy to staging"
       script:
-        - echo "Run deploy script"
+        - ssh ubuntu@emailer.tenants.cloud echo "Hello World"
 after_success:
   - docker --version
+
