@@ -72,7 +72,7 @@ jobs:
     - stage: "Deploy"
       name: "Deploy to staging"
       script:
-        - ssh ubuntu@emailer.tenants.cloud echo "Hello World"
+        - ssh ubuntu@emailer.tenants.cloud echo "Hello World!"
 after_success:
   - docker --version
 
