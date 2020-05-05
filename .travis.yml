@@ -50,6 +50,6 @@ jobs:
     script:
     - ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello World!"
     - echo "$TRAVIS_BRANCH"
-    - echo "TRAVIS_PULL_REQUEST_BRANCH"
+    - echo "$TRAVIS_PULL_REQUEST_BRANCH"
 after_success:
 - docker --version
