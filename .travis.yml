@@ -28,9 +28,6 @@ php:
 services:
 - mysql
 - docker
-cache:
-  directories:
-  - node_modules
 install:
 - cp .env.example .env
 - sudo mysql -uroot -proot -e 'CREATE DATABASE laravel;'
@@ -60,6 +57,7 @@ jobs:
     - sed -i "s#CDN_URL=.*#CDN_URL=$CDN_LINK#g" .env.example
     - sed -i "s#APP_ENV=.*#APP_ENV=$TRAVIS_BRANCH#g" .env.example
     - export SSHPASS=$DEPLOY_PASS
+    - echo "Test"
     - sshpass -e scp -P 60001 server.php $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
 after_success:
 - docker --version
