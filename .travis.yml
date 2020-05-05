@@ -50,7 +50,9 @@ jobs:
             #    - ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello World!"
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
     - sed -i "s#CDN_URL=.*#CDN_URL=$CDN_LINK#g" .env.example
-    - echo "$(cat .env.example | grep CDN_URL)"
+    - sed -i "s#APP_ENV=.*#APP_ENV=$TRAVIS_BRANCH#g" .env.example
+    - echo "$(cat .env.example | grep CDN_URL)" > test.log
+    - cat test.log
 
 after_success:
 - docker --version
