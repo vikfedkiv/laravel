@@ -14,8 +14,6 @@ before_install:
 - sudo mysql_upgrade -u root -proot
 - sudo service mysql restart
 - composer global require hirak/prestissimo
-- echo '$SSH_KEY_STAGING' >> $HOME/.ssh/id_rsa.pub
-- chmod 600 $HOME/.ssh/id_rsa.pub
 language: php
 php:
 - 7.4
@@ -25,7 +23,7 @@ services:
 cache:
   directories:
   - node_modules
-before_script:
+install:
 - cp .env.example .env
 - sudo mysql -uroot -proot -e 'CREATE DATABASE laravel;'
 - sudo mysql -uroot -proot -e "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
@@ -47,9 +45,12 @@ jobs:
     name: Frontend Tests
   - stage: Deploy
     name: Deploy to staging
+    install: skip
     script:
-    - ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello World!"
-    - echo "$TRAVIS_BRANCH"
-    - echo "$TRAVIS_PULL_REQUEST_BRANCH"
+            #    - ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello World!"
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
+    - sed -i "s#CDN_URL=.*#CDN_URL=$CDN_LINK#g" .env.example
+    - cat .env.example| grep CDN_URL
+
 after_success:
 - docker --version
