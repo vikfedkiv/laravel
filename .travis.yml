@@ -53,6 +53,8 @@ jobs:
     name: Deploy to staging
     install: skip
     script:
+    - git config --global user.email "v.fedkiv@tenantcloud.com"
+    - git config --global user.name "vikfedkiv"
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH"
       ; fi
     - git tag 1.1.1
