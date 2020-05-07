@@ -25,7 +25,6 @@ php:
 - 7.4
 services:
 - mysql
-- docker
 install:
 - cp .env.example .env
 - sudo mysql -uroot -proot -e 'CREATE DATABASE laravel;'
@@ -47,17 +46,19 @@ jobs:
     - echo "frontend test 2"
     name: Frontend Tests
   - stage: Deploy
-    env:
-      - AWS_ACCESS_KEY_ID=$TEST1
-      - AWS_SECRET_ACCESS_KEY=$TEST2
     name: Deploy to staging
     install: skip
     script:
-    - git config --global user.email "v.fedkiv@tenantcloud.com"
-    - git config --global user.name "vikfedkiv"
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH"
-      ; fi
+    - git config --global user.email "travis@travis-ci.org"
+    - git config --global user.name "Travis CI"
+    - git remote remove origin
+    - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
     - git tag 1.1.1
     - git push origin 1.1.1
+    - echo "$TRAVIS_PULL_REQUEST"
+    - echo "$TRAVIS_PULL_REQUEST_BRANCH"
+    - echo "$TRAVIS_PULL_REQUEST_SLUG"
+    - echo "$TRAVIS_REPO_SLUG"
 after_success:
 - docker --version
