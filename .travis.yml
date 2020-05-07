@@ -54,6 +54,7 @@ jobs:
     - git remote remove origin
     - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
-    - curl -XPUT -H "Authorization: token ${GH_TOKEN}" "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/pulls/${TRAVIS_PULL_REQUEST}/merge"
+    - export $GH_TOKEN
+    - curl -XPUT -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST/merge"
 after_success:
 - docker --version
