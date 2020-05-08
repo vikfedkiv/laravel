@@ -6,6 +6,8 @@ addons:
 env:
   global:
   - DEBIAN_FRONTEND=noninteractive
+    #  - SSH_STAGING=$HOSTNAME_STAGING
+    #  - SSH_MASTER=$HOSTNAME_MASTER
 before_install:
 - pip install -U pip
 - pip install awscli
@@ -56,7 +58,7 @@ jobs:
     - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@HOSTNAME_STAGING echo "Hello from $hostname" ; fi
-    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@HOSTNAME_MASTER echo "Hello from $hostname" ; fi
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello from $hostname" ; fi
+    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER echo "Hello from $hostname" ; fi
 after_success:
 - docker --version
