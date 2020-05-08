@@ -14,6 +14,7 @@ before_install:
 - eval "$(ssh-agent -s)"
 - chmod 600 ./deploy_key
 - echo -e "Host $HOSTNAME_STAGING\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- echo -e "Host $HOSTNAME_MASTER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - ssh-add ./deploy_key
 - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root')
   where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
@@ -54,10 +55,8 @@ jobs:
     - git remote remove origin
     - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
-    - export GT=$(echo $GH_TOKEN)
-    - export TR=$(echo $TRAVIS_REPO_SLUG)
-    - export TPR=$(echo $TRAVIS_PULL_REQUEST)
-    - curl -XPUT -H "Authorization: token $GT" "https://api.github.com/repos/$TR/pulls/$TPR/merge"
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@HOSTNAME_STAGING echo "Hello from $hostname" ; fi
+    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@HOSTNAME_MASTER echo "Hello from $hostname" ; fi
 after_success:
 - docker --version
