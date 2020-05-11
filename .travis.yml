@@ -58,6 +58,5 @@ jobs:
     - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi || travis_terminate 1;
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING "echo Hello from \$HOSTNAME" ; fi
-    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER "echo Hello from \$HOSTNAME" ; fi
-    - echo "$TEST1"
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING /var/www/html/emailer/sh/test.sh ; fi
+    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER /var/www/html/emailer/sh/test.sh ; fi
