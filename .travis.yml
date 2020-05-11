@@ -61,13 +61,11 @@ jobs:
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING "echo Hello from \$HOSTNAME" ; fi
     - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER "echo Hello from \$HOSTNAME" ; fi
 deploy:
-  provider: script
-  script: echo "asfjaksjfka"
+  provider: s3
+  access_key_id: "$AMAK"
+  secret_access_key: "$AMASK"
+  bucket: "tcpdftest"
+  skip_cleanup: true
+  local_dir: docs
   on:
     all_branches: true
-      #  - provider: s3
-      #    access_key_id: "$AMAK"
-      #    secret_access_key: "$AMASK"
-      #    bucket: "tcpdftest"
-      #    skip_cleanup: true
-      #    local_dir: docs
