@@ -51,7 +51,6 @@ jobs:
   - stage: Deploy
     name: Deploy
     install: skip
-  - provider: script
     script:
     - git config --global user.email "travis@travis-ci.org"
     - git config --global user.name "Travis CI"
@@ -61,9 +60,9 @@ jobs:
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING "echo Hello from \$HOSTNAME" ; fi
     - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER "echo Hello from \$HOSTNAME" ; fi
-  - provider: s3
-    access_key_id: "$AMAK"
-    secret_access_key: "$AMASK"
-    bucket: "tcpdftest"
-    skip_cleanup: true
-    local_dir: docs
+      #  - provider: s3
+      #    access_key_id: "$AMAK"
+      #    secret_access_key: "$AMASK"
+      #    bucket: "tcpdftest"
+      #    skip_cleanup: true
+      #    local_dir: docs
