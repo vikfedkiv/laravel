@@ -1,75 +1,60 @@
 dist: bionic
-#addons:
-#  artifacts:
-#    s3_region: "us-west-2"
-#    paths:
-#    - /home/travis/build/vikfedkiv/laravel/storage/logs/
+addons:
+  apt:
+    packages:
+      - sshpass
 env:
- global:
+  global:
   - DEBIAN_FRONTEND=noninteractive
 before_install:
-  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
-  - sudo mysql_upgrade -u root -proot
-  - sudo service mysql restart
-  - composer global require hirak/prestissimo
-    #  - sudo apt-get update
-    #  - sudo apt-get install -y supervisor python3
-    #  - sudo cp /home/travis/build/vikfedkiv/laravel/docs/docker/config/php/docker/config/supervisord.conf /etc/supervisor/supervisord.conf
-    #  - sudo service supervisor restart
-    #  - sudo service supervisor status
-    #  - sudo supervisorctl status
-    #  - sudo lsof -c supervisord | egrep 'COMMAND|sock'
-    #  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-amd64.deb
-    #  - sudo dpkg -i --force-confnew elasticsearch-7.1.0-amd64.deb
-    #  - sudo sed -i.old 's/-Xms1g/-Xms128m/' /etc/elasticsearch/jvm.options
-    #  - sudo sed -i.old 's/-Xmx1g/-Xmx128m/' /etc/elasticsearch/jvm.options
-    #  - echo -e '-XX:+DisableExplicitGC\n-Djdk.io.permissionsUseCanonicalPath=true\n-Dlog4j.skipJansi=true\n-server\n' | sudo tee -a /etc/elasticsearch/jvm.options
-    #  - sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch
-    #  - sudo service elasticsearch restart
-    #  - curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > docker-compose
-    #  - chmod +x docker-compose
-    #  - sudo mv docker-compose /usr/local/bin
-    #  - pip install --user awscli
-    #  - export PATH=$PATH:$HOME/.local/bin
-    #  - eval $(aws ecr get-login --no-include-email --region us-west-2)
-    #  - docker pull 963713796187.dkr.ecr.us-west-2.amazonaws.com/pipeline/minio:latest
-    #  - echo "openssl.cafile = /usr/local/etc/nginx/ssl/cacert.pem" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+- pip install -U pip
+- pip install awscli
+- openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
+  -in deploy_key.enc -out ./deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 ./deploy_key
+- echo -e "Host $HOSTNAME_STAGING\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- ssh-add ./deploy_key
+- sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root')
+  where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+- sudo mysql_upgrade -u root -proot
+- sudo service mysql restart
+- composer global require hirak/prestissimo
 language: php
 php:
-  - 7.4
+- 7.4
 services:
-  - mysql
-  - docker
-cache:
-  directories:
-    - node_modules
-before_script:
-  #  - until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
-  - cp .env.example .env
-  - sudo mysql -uroot -proot -e 'CREATE DATABASE laravel;'
-  - sudo mysql -uroot -proot -e "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
-  - sudo mysql -uroot -proot -e "GRANT ALL ON laravel.* TO 'keller'@'localhost';"
-  - composer self-update
-  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
-  - php artisan key:generate
-  - php artisan migrate
-    #script:
-    #  - vendor/bin/phpunit
-    #  - cp .env.example storage/logs/example.file
+- mysql
+install:
+- cp .env.example .env
+- sudo mysql -uroot -proot -e 'CREATE DATABASE laravel;'
+- sudo mysql -uroot -proot -e "CREATE USER 'keller'@'localhost' IDENTIFIED BY 'password';"
+- sudo mysql -uroot -proot -e "GRANT ALL ON laravel.* TO 'keller'@'localhost';"
+- composer self-update
+- COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
+- php artisan key:generate
+- php artisan migrate
 jobs:
   include:
-    - stage: "Tests"
-      name: "Backend Tests"
-      script:
-        - echo "backend test 1"
-        - echo "backend test 2"
-    - script:
-        - echo "frontend test 1"
-        - echo "frontend test 2"
-      name: "Frontend Tests"
-    - stage: "Deploy"
-      name: "Deploy to staging"
-      script:
-        - echo "Run deploy script"
+          #  - stage: Tests
+          #    name: Backend Tests
+          #    script:
+          #    - echo "backend test 1"
+          #    - echo "backend test 2"
+          #  - script:
+          #    - echo "frontend test 1"
+          #    - echo "frontend test 2"
+          #    name: Frontend Tests
+  - stage: Deploy
+    name: Deploy to staging
+    install: skip
+    script:
+    - git config --global user.email "travis@travis-ci.org"
+    - git config --global user.name "Travis CI"
+    - git remote remove origin
+    - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
+      #    - curl -XPUT -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST/merge"
+    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
 after_success:
-  - docker --version
+- docker --version
