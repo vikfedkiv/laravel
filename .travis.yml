@@ -6,6 +6,8 @@ addons:
 env:
   global:
   - DEBIAN_FRONTEND=noninteractive
+    #  - SSH_STAGING=$HOSTNAME_STAGING
+    #  - SSH_MASTER=$HOSTNAME_MASTER
 before_install:
 - pip install -U pip
 - pip install awscli
@@ -14,6 +16,7 @@ before_install:
 - eval "$(ssh-agent -s)"
 - chmod 600 ./deploy_key
 - echo -e "Host $HOSTNAME_STAGING\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- echo -e "Host $HOSTNAME_MASTER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - ssh-add ./deploy_key
 - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root')
   where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
@@ -36,25 +39,25 @@ install:
 - php artisan migrate
 jobs:
   include:
-          #  - stage: Tests
-          #    name: Backend Tests
-          #    script:
-          #    - echo "backend test 1"
-          #    - echo "backend test 2"
-          #  - script:
-          #    - echo "frontend test 1"
-          #    - echo "frontend test 2"
-          #    name: Frontend Tests
+  - stage: Tests
+    name: Backend Tests
+    script:
+    - echo "backend test 1"
+    - echo "backend test 2"
+  - script:
+    - echo "frontend test 1"
+    - echo "frontend test 2"
+    name: Frontend Tests
   - stage: Deploy
-    name: Deploy to staging
+    name: Deploy to server
     install: skip
     script:
     - git config --global user.email "travis@travis-ci.org"
     - git config --global user.name "Travis CI"
     - git remote remove origin
     - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi
-      #    - curl -XPUT -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST/merge"
-    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
-after_success:
-- docker --version
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi || travis_terminate 1;
+      #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING "echo Hello from \$HOSTNAME" ; fi
+    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER "echo Hello from \$HOSTNAME" ; fi
+    - echo "$TEST1"
