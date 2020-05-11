@@ -62,3 +62,4 @@ jobs:
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_STAGING echo "Test" ; fi
     - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_MASTER echo "Test" ; fi
+    - echo "$TRAVIS_BUILD_DIR"
