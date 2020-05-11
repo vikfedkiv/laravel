@@ -49,7 +49,7 @@ jobs:
     - echo "frontend test 2"
     name: Frontend Tests
   - stage: Deploy
-    name: Deploy
+    name: Deploy to server
     install: skip
     script:
     - git config --global user.email "travis@travis-ci.org"
