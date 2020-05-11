@@ -37,7 +37,6 @@ install:
 - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
 - php artisan key:generate
 - php artisan migrate
-before_deploy: "echo 'ready?'"
 jobs:
   include:
   - stage: Tests
@@ -61,6 +60,11 @@ jobs:
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING "echo Hello from \$HOSTNAME" ; fi
     - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER "echo Hello from \$HOSTNAME" ; fi
+deploy:
+  provider: script
+  script: echo "asfjaksjfka"
+  on:
+    all_branches: true
       #  - provider: s3
       #    access_key_id: "$AMAK"
       #    secret_access_key: "$AMASK"
