@@ -60,6 +60,6 @@ jobs:
     - git remote add origin https://${GH_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi || travis_terminate 1;
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_STAGING echo "Test" ; fi
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello from \$HOSTNAME" ; fi
     - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_MASTER echo "Test" ; fi
     - echo "$TRAVIS_REPO_SLUG"
