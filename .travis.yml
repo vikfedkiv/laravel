@@ -52,6 +52,7 @@ jobs:
     name: Frontend Tests
   - stage: Deploy
     name: Deploy to server
+    if: branch IN (master, staging) AND type == push
     install: skip
     script:
     - git config --global user.email "travis@travis-ci.org"
