@@ -11,13 +11,15 @@ env:
 before_install:
 - pip install -U pip
 - pip install awscli
-- openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
-  -in deploy_key.enc -out ./deploy_key -d
-- eval "$(ssh-agent -s)"
-- chmod 600 ./deploy_key
+  #- openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
+  #  -in deploy_key.enc -out ./deploy_key -d
+  #- eval "$(ssh-agent -s)"
+  #- chmod 600 ./deploy_key
+- echo "$PRIVATE_KEY" | base64 -d > ~/.ssh/deploy_key
+- chmod 600 ~/.ssh/deploy_key
 - echo -e "Host $HOSTNAME_STAGING\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - echo -e "Host $HOSTNAME_MASTER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- ssh-add ./deploy_key
+  #- ssh-add ~/.ssh/deploy_key
 - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root')
   where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
 - sudo mysql_upgrade -u root -proot
@@ -50,14 +52,15 @@ jobs:
     name: Frontend Tests
   - stage: Deploy
     name: Deploy to server
+    if: branch IN (master, staging) AND type == push
     install: skip
     script:
     - git config --global user.email "travis@travis-ci.org"
     - git config --global user.name "Travis CI"
     - git remote remove origin
-    - git remote add origin https://${GH_TOKEN}@github.com/vikfedkiv/laravel.git > /dev/null 2>&1
+    - git remote add origin https://${GH_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1
     - if [[ $TRAVIS_BRANCH == "staging" ]] ; then echo "Testing brach $TRAVIS_BRANCH" ; fi || travis_terminate 1;
       #    - sh/pipeline/merge_pull_request.sh $TRAVIS_PULL_REQUEST
-    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_STAGING "echo Hello from \$HOSTNAME" ; fi
-    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ./deploy_key ubuntu@$HOSTNAME_MASTER "echo Hello from \$HOSTNAME" ; fi
-    - echo "$TEST1"
+    - if [[ $TRAVIS_BRANCH == "staging" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_STAGING echo "Hello from \$HOSTNAME" ; fi
+    - if [[ $TRAVIS_BRANCH == "master" ]] ; then ssh -i ~/.ssh/deploy_key ubuntu@$HOSTNAME_MASTER echo "Test" ; fi
+    - echo "$TRAVIS_REPO_SLUG"
