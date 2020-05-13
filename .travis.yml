@@ -53,7 +53,7 @@ jobs:
     name: Frontend Tests
     if: branch IN (master, staging) AND type == push
   - script:
-    - echo $TRAVIS_PYTHON_VERSION
+    - python --version
     name: Karma Tests
     if: branch IN (master, staging) AND type == push
   - stage: Deploy
