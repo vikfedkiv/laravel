@@ -52,6 +52,10 @@ jobs:
     - echo "frontend test 2"
     name: Frontend Tests
     if: branch IN (master, staging) AND type == push
+  - script:
+    - echo "karma test"
+    name: Karma Tests
+    if: branch IN (master, staging) AND type == push
   - stage: Deploy
     name: Deploy to server
     if: branch IN (master, staging) AND type == push
