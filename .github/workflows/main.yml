@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Staging prepare 🚗
         run: |
-            echo "Staging prepare"
+            echo "Staging prepare."
   staging_frontend_build:
     needs: [staging_prepare]
     runs-on: self-hosted
