@@ -23,3 +23,4 @@ jobs:
             echo "Production prepare."
             echo "The commit SHA is ${{ github.event.inputs.commit }}"
             cat test.txt
+            git switch -
