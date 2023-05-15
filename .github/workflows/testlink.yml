@@ -1,0 +1,24 @@
+name: Test link deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action for Testing environment'
+        required: true
+        default: 'update'
+        type: choice
+        options:
+          - update
+          - create
+          - destroy
+    branches:
+      - 'testlink/**'
+
+jobs:
+  staging_prepare:
+    runs-on: self-hosted
+    steps:
+      - name: Staging prepare 🚗
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
