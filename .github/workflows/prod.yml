@@ -1,0 +1,25 @@
+name: Production deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Commit SHA'
+        required: true
+        type: string
+
+jobs:
+  production_prepare:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout 👀
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          lfs: false
+          ref: ${{ github.event.inputs.commit }}
+      - name: Production prepare 🚗
+        run: |
+            echo "Production prepare."
+            echo "The commit SHA is ${{ github.event.inputs.commit }}"
+            cat test.txt
