@@ -16,9 +16,24 @@ on:
       - 'testlink/**'
 
 jobs:
-  staging_prepare:
+  create:
     runs-on: self-hosted
     steps:
-      - name: Staging prepare 🚗
+      - name: Create 🚗
+        if: ${{ github.event.inputs.action == 'create' }}
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  update:
+    runs-on: self-hosted
+    steps:
+      - name: Uodate 🚗
+        if: ${{ github.event.inputs.action == 'update' }}
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  destroy:
+    runs-on: self-hosted
+    steps:
+      - name: Destroy 🚗
+        if: ${{ github.event.inputs.action == 'destroy' }}
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
