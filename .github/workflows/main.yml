@@ -11,7 +11,7 @@ on:
         type: choice
         description: Make a choice
         options:
-        - ${{ github.sha }}
+        - ${{ github.sha | slice(0, 7) }}
 
 jobs:
   staging_prepare:
