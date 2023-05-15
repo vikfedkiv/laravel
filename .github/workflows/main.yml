@@ -7,15 +7,6 @@ on:
   #    branches: [ master ]
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
       print_tags:
         description: 'True to print to STDOUT'
         required: true
@@ -24,10 +15,6 @@ on:
         description: 'Test scenario tags'
         required: true
         type: string
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
 
 jobs:
   staging_prepare:
@@ -36,55 +23,56 @@ jobs:
       - name: Staging prepare 🚗
         run: |
             echo "Staging prepare."
-  staging_frontend_build:
-    needs: [staging_prepare]
-    runs-on: self-hosted
-    steps:
-      - name: Staging FrontEnd Build 🚗
-        run: |
-            echo "Staging FrontEnd Build"
-  staging_containers_build:
-    needs: [staging_prepare]
-    runs-on: self-hosted
-    steps:
-      - name: Staging Containers Build 🚗
-        run: |
-            echo "Staging Containers Build"
-  staging_deploy:
-    needs: [staging_frontend_build, staging_containers_build]
-    runs-on: self-hosted
-    steps:
-      - name: Staging prepare 🚗
-        run: |
-            echo "Staging Deploy"
-  staging_e2e_cypress:
-    needs: [staging_deploy]
-    runs-on: self-hosted
-    steps:
-      - name: Staging prepare 🚗
-        run: |
-            echo "Staging E2E Cypress tests"
-  production_prepare:
-    needs: [staging_e2e_cypress]
-    environment:
-      name: production
-      url: https://navi.gg
-    runs-on: self-hosted
-    steps:
-      - name: Production prepare 🚗
-        run: |
-            echo "Staging prepare"
-  production_containers_build:
-    needs: [production_prepare]
-    runs-on: self-hosted
-    steps:
-      - name: Production Containers Build 🚗
-        run: |
-            echo "Production Containers Build"
-  production_deploy:
-    needs: [production_containers_build]
-    runs-on: self-hosted
-    steps:
-      - name: Production prepare 🚗
-        run: |
-            echo "Production Deploy"
+            echo "The tag is ${{ env.INPUT_TAGS }}"
+            #  staging_frontend_build:
+            #    needs: [staging_prepare]
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Staging FrontEnd Build 🚗
+            #        run: |
+            #            echo "Staging FrontEnd Build"
+            #  staging_containers_build:
+            #    needs: [staging_prepare]
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Staging Containers Build 🚗
+            #        run: |
+            #            echo "Staging Containers Build"
+            #  staging_deploy:
+            #    needs: [staging_frontend_build, staging_containers_build]
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Staging prepare 🚗
+            #        run: |
+            #            echo "Staging Deploy"
+            #  staging_e2e_cypress:
+            #    needs: [staging_deploy]
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Staging prepare 🚗
+            #        run: |
+            #            echo "Staging E2E Cypress tests"
+            #  production_prepare:
+            #    needs: [staging_e2e_cypress]
+            #    environment:
+            #      name: production
+            #      url: https://navi.gg
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Production prepare 🚗
+            #        run: |
+            #            echo "Staging prepare"
+            #  production_containers_build:
+            #    needs: [production_prepare]
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Production Containers Build 🚗
+            #        run: |
+            #            echo "Production Containers Build"
+            #  production_deploy:
+            #    needs: [production_containers_build]
+            #    runs-on: self-hosted
+            #    steps:
+            #      - name: Production prepare 🚗
+            #        run: |
+            #            echo "Production Deploy"
