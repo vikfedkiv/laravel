@@ -1,18 +1,25 @@
 name: TenantCloud CI/CD
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  #  push:
+  #    branches: [ master ]
+  #  pull_request:
+  #    branches: [ master ]
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'     
-        required: true
-        default: 'warning'
-      tags:
-        description: 'Test scenario tags'
+      environment:
+        type: environment
+        description: Select the environment
+      boolean:
+        type: boolean
+        description: True or False
+      choice:
+        type: choice
+        description: Make a choice
+        options:
+        - foo
+        - bar
+        - baz
 
 jobs:
   staging_prepare:
