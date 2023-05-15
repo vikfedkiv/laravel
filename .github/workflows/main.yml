@@ -23,7 +23,7 @@ jobs:
       - name: Staging prepare 🚗
         run: |
             echo "Staging prepare."
-            echo "The tag is ${{ env.INPUT_TAGS }}"
+            echo "The tag is ${{ github.event.inputs.tags }}"
             #  staging_frontend_build:
             #    needs: [staging_prepare]
             #    runs-on: self-hosted
