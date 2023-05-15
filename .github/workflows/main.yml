@@ -7,11 +7,27 @@ on:
   #    branches: [ master ]
   workflow_dispatch:
     inputs:
-      choice:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
         type: choice
-        description: Make a choice
         options:
-        - ${{ github.sha | slice(0, 7) }}
+          - info
+          - warning
+          - debug
+      print_tags:
+        description: 'True to print to STDOUT'
+        required: true
+        type: boolean
+      tags:
+        description: 'Test scenario tags'
+        required: true
+        type: string
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
 
 jobs:
   staging_prepare:
