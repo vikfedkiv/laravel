@@ -1,12 +1,8 @@
 name: Production deployment
 
 on:
-  workflow_dispatch:
-    inputs:
-      commit:
-        description: 'Commit SHA'
-        required: true
-        type: string
+  release:
+    types: [created]
 
 jobs:
   production_prepare:
