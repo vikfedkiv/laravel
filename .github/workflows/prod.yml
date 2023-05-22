@@ -15,8 +15,4 @@ jobs:
           lfs: false
       - name: Production prepare 🚗
         run: |
-            git checkout -f ${{ github.event.inputs.commit }}
-            echo "Production prepare."
-            echo "The commit SHA is ${{ github.event.inputs.commit }}"
             cat test.txt
-            git switch -
