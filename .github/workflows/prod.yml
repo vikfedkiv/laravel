@@ -15,4 +15,5 @@ jobs:
           lfs: false
       - name: Production prepare 🚗
         run: |
+            echo "Selected tag: ${{ github.ref }}"
             cat test.txt
