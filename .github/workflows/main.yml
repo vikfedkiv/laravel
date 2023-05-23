@@ -23,3 +23,10 @@ jobs:
   staging_tests:
     uses: ./.github/workflows/ci.yml
     needs: [staging_prepare]
+  e2e_cypress_staging:
+    runs-on: self-hosted
+    needs: [staging_prepare]
+    steps:
+      - name: E2E Staging Cypress tests 🚗
+        run: |
+          echo "E2E Staging Cypress tests."
