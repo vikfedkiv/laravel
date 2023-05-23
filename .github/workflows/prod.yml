@@ -15,5 +15,6 @@ jobs:
           lfs: false
       - name: Production prepare 🚗
         run: |
-            echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+            TTT=$( echo ${{ github.ref_name }} )
+            echo $TTT
             cat test.txt
