@@ -15,5 +15,7 @@ jobs:
           lfs: false
       - name: Production prepare 🚗
         run: |
-            echo "Selected tag: ${{ github.ref }}"
+            TAG=${{ github.ref }}
+            TAG=${{ TAG/refs\/tags\// }}
+            echo "Selected tag: $TAG"
             cat test.txt
