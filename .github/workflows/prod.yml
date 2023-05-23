@@ -15,7 +15,5 @@ jobs:
           lfs: false
       - name: Production prepare 🚗
         run: |
-            echo "Selected tag: ${{ github.ref.replace('refs/tags/', '') }}"
-            TTT=$( echo "Selected tag: ${{ github.ref.replace('refs/tags/', '') }}" )
-            echo $TTT
+            echo "Tag name from github.ref_name: ${{  github.ref_name }}"
             cat test.txt
