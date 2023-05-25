@@ -15,5 +15,5 @@ jobs:
     steps:
       - name: Tests 🚗
         run: |
-            sleep 100500
+            sleep 10050
             echo "Run tests"
