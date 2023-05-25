@@ -5,10 +5,15 @@ on:
     branches: [ master ]
   workflow_call:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   tests:
     runs-on: self-hosted
     steps:
       - name: Tests 🚗
         run: |
+            sleep 100500
             echo "Run tests"
