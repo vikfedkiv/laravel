@@ -10,7 +10,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  tests:
+  backend_test:
+    runs-on: self-hosted
+    steps:
+      - name: Tests 🚗
+        run: |
+            echo "Run tests"
+  frontend_test:
+    runs-on: self-hosted
+    steps:
+      - name: Tests 🚗
+        run: |
+            echo "Run tests"
+  frontend_build:
+    runs-on: self-hosted
+    steps:
+      - name: Tests 🚗
+        run: |
+            echo "Run tests"
+  e2e_cypress:
     runs-on: self-hosted
     steps:
       - name: Tests 🚗
