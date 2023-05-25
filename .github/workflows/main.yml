@@ -36,13 +36,14 @@ jobs:
           echo "Staging container build."
   staging_deploy:
     runs-on: self-hosted
+    needs: [staging_frontend_build, staging_container_build]
     steps:
       - name: Staging Deploy 🚗
         run: |
           echo "Staging Deploy."
   staging_tests:
     uses: ./.github/workflows/ci.yml
-    needs: [staging_frontend_build, staging_container_build]
+    needs: [staging_deploy]
   e2e_cypress_staging:
     runs-on: self-hosted
     needs: [staging_deploy]
