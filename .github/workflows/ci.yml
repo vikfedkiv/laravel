@@ -30,6 +30,7 @@ jobs:
             echo "Run tests"
   e2e_cypress:
     runs-on: self-hosted
+    if: ${{ github.event_name != 'workflow_call' }}
     steps:
       - name: Tests 🚗
         run: |
