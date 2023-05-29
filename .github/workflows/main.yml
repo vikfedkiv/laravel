@@ -51,4 +51,4 @@ jobs:
     steps:
       - name: E2E Staging Cypress tests 🚗
         run: |
-          echo "Staging e2e_cypress tests.."
+          echo "Staging e2e_cypress tests..."
