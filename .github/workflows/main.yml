@@ -7,7 +7,7 @@ on:
 jobs:
   staging_prepare:
     runs-on: self-hosted
-    if: contains(vars.ALLOWED_USER, github.actor)
+    if: contains(split(vars.ALLOWED_USER, ","), github.actor)
     steps:
       - name: Checkout 👀
         uses: actions/checkout@v3
