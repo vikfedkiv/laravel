@@ -7,48 +7,48 @@ on:
 jobs:
   staging_prepare:
     runs-on: self-hosted
-    if: contains('simpli vikfedkiv', github.actor)
+    if: contains('vars.ALLOWED_USERS', github.actor)
     steps:
       - name: Checkout 👀
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           lfs: false
-      - name: Staging prepare 🚗
-        run: |
-          echo "Staging prepare."
-          LATEST_TAG=$( git describe --tags --abbrev=0 )
-          NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
-          git tag $NEW_TAG
-          git push origin $NEW_TAG
-  staging_frontend_build:
-    runs-on: self-hosted
-    needs: [staging_prepare]
-    steps:
-      - name: Staging FrontEnd Build 🚗
-        run: |
-          echo "Staging FrontEnd build."
-  staging_container_build:
-    runs-on: self-hosted
-    needs: [staging_prepare]
-    steps:
-      - name: Staging Container Build 🚗
-        run: |
-          echo "Staging container build."
-  staging_deploy:
-    runs-on: self-hosted
-    needs: [staging_frontend_build, staging_container_build]
-    steps:
-      - name: Staging Deploy 🚗
-        run: |
-          echo "Staging Deploy."
-  staging_tests:
-    uses: ./.github/workflows/ci.yml
-    needs: [staging_deploy]
-  e2e_cypress_staging:
-    runs-on: self-hosted
-    needs: [staging_deploy]
-    steps:
-      - name: E2E Staging Cypress tests 🚗
-        run: |
-          echo "Staging e2e_cypress tests..."
+            #      - name: Staging prepare 🚗
+            #        run: |
+            #          echo "Staging prepare."
+            #          LATEST_TAG=$( git describe --tags --abbrev=0 )
+            #          NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
+            #          git tag $NEW_TAG
+            #          git push origin $NEW_TAG
+            #  staging_frontend_build:
+            #    runs-on: self-hosted
+            #    needs: [staging_prepare]
+            #    steps:
+            #      - name: Staging FrontEnd Build 🚗
+            #        run: |
+            #          echo "Staging FrontEnd build."
+            #  staging_container_build:
+            #    runs-on: self-hosted
+            #    needs: [staging_prepare]
+            #    steps:
+            #      - name: Staging Container Build 🚗
+            #        run: |
+            #          echo "Staging container build."
+            #  staging_deploy:
+            #    runs-on: self-hosted
+            #    needs: [staging_frontend_build, staging_container_build]
+            #    steps:
+            #      - name: Staging Deploy 🚗
+            #        run: |
+            #          echo "Staging Deploy."
+            #  staging_tests:
+            #    uses: ./.github/workflows/ci.yml
+            #    needs: [staging_deploy]
+            #  e2e_cypress_staging:
+            #    runs-on: self-hosted
+            #    needs: [staging_deploy]
+            #    steps:
+            #      - name: E2E Staging Cypress tests 🚗
+            #        run: |
+            #          echo "Staging e2e_cypress tests..."
