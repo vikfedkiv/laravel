@@ -7,7 +7,7 @@ on:
 jobs:
   staging_prepare:
     runs-on: self-hosted
-    if: github.actor != 'vikfedkiv'
+    if: contains(vars.ALLOWED_USER, github.actor)
     steps:
       - name: Checkout 👀
         uses: actions/checkout@v3
