@@ -18,3 +18,5 @@ jobs:
             TTT=$( echo ${{ github.ref_name }} )
             echo $TTT
             cat test.txt
+            BBB=$( echo ${{ github.actor }} )
+            echo $BBB
