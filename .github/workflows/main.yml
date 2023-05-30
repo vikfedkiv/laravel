@@ -12,9 +12,9 @@ on:
         options: 
         - rollback
         - rollback to php-fpm
-      tag:
-        description: Tag for rollback
-        required: true
+          #      tag:
+          #        description: Tag for rollback
+          #        required: true
       password:
         required: true
         description: Password for action
@@ -32,11 +32,11 @@ jobs:
         with:
           fetch-depth: 0
           lfs: false
-          ref: ${{ github.event.inputs.tag }}
+          ref: ${{ github.ref_name }}
       - name: Staging prepare 🚗
         run: |
           echo "${{ github.event.inputs.type }}"
-          echo "${{ github.event.inputs.tag }}"
+          echo "${{ github.ref_name }}"
           echo "${{ github.event.inputs.password }}"
           echo "${{ github.event.inputs.environment }}"
   #  staging_prepare:
