@@ -12,9 +12,6 @@ on:
         options: 
         - rollback
         - rollback to php-fpm
-          #      tag:
-          #        description: Tag for rollback
-          #        required: true
       password:
         required: true
         description: Password for action
@@ -25,7 +22,7 @@ on:
 jobs:
   staging_prepare:
     runs-on: self-hosted
-    if: github.event.inputs.password == "${{ vars.ROLLBACK_PASSWORD }}"
+    if: ${{ github.event.inputs.password == vars.ROLLBACK_PASSWORD }}
     steps:
       - name: Checkout 👀
         uses: actions/checkout@v3
