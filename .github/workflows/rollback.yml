@@ -1,0 +1,38 @@
+name: Rollback
+
+on:
+  workflow_dispatch:
+    tags:
+      - '*'
+    inputs:
+      type:
+        type: choice
+        description: Rollback type
+        required: true
+        options:
+        - rollback
+        - rollback to php-fpm
+      password:
+        required: true
+        description: Password for action
+      environment:
+        type: environment
+        required: true
+
+jobs:
+  rollback:
+    runs-on: self-hosted
+    if: ${{ github.event.inputs.password == vars.ROLLBACK_PASSWORD }}
+    steps:
+      - name: Checkout 👀
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: false
+          ref: ${{ github.ref_name }}
+      - name: Staging prepare 🚗
+        run: |
+          echo "${{ github.event.inputs.type }}"
+          echo "${{ github.ref_name }}"
+          echo "${{ github.event.inputs.password }}"
+          echo "${{ github.event.inputs.environment }}"
