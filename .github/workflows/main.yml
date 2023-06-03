@@ -7,6 +7,9 @@ on:
 jobs:
   staging_prepare:
     runs-on: self-hosted
+    concurrency:
+      group: staging_incr_version
+      cancel-in-progress: false
     if: contains(vars.ALLOWED_USERS, github.actor)
     steps:
       - name: Checkout 👀
@@ -17,10 +20,11 @@ jobs:
       - name: Staging prepare 🚗
         run: |
           echo "Staging prepare."
-          LATEST_TAG=$( git describe --tags --abbrev=0 )
-          NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
-          git tag $NEW_TAG
-          git push origin $NEW_TAG
+          sleep 60
+          # LATEST_TAG=$( git describe --tags --abbrev=0 )
+          # NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
+          # git tag $NEW_TAG
+          # git push origin $NEW_TAG
   staging_frontend_build:
     runs-on: self-hosted
     needs: [staging_prepare]
@@ -28,6 +32,7 @@ jobs:
       - name: Staging FrontEnd Build 🚗
         run: |
           echo "Staging FrontEnd build."
+          sleep 120
   staging_container_build:
     runs-on: self-hosted
     needs: [staging_prepare]
@@ -35,20 +40,29 @@ jobs:
       - name: Staging Container Build 🚗
         run: |
           echo "Staging container build."
+          sleep 120
   staging_deploy:
     runs-on: self-hosted
+    concurrency:
+      group: staging
+      cancel-in-progress: false
     needs: [staging_frontend_build, staging_container_build]
     steps:
       - name: Staging Deploy 🚗
         run: |
           echo "Staging Deploy."
+          sleep 300
   staging_tests:
     uses: ./.github/workflows/ci.yml
     needs: [staging_deploy]
   e2e_cypress_staging:
     runs-on: self-hosted
+    concurrency:
+      group: staging
+      cancel-in-progress: false
     needs: [staging_deploy]
     steps:
       - name: E2E Staging Cypress tests 🚗
         run: |
           echo "Staging e2e_cypress tests...."
+          sleep 300
