@@ -66,12 +66,13 @@ jobs:
     concurrency:
       group: staging_incr_version
       cancel-in-progress: false
+    outputs:
+      ttt: ${{ steps.vars.outputs.ttt }}
     steps:
       - name: Staging prepare 🚗
         id: vars
         run: |
-          echo "ttt=lalala" >> $GITHUB_ENV
-          echo "::set-output name=ttt::lalala"
+          echo "ttt=lalala" >> "$GITHUB_OUTPUT"
   staging_deploy:
     runs-on: self-hosted
     needs: [staging_prepare]
@@ -80,5 +81,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Staging deploy 🚗
+        env:
+          TTT: ${{needs.staging_prepare.outputs.ttt}}
         run: |
-          echo ${{ needs.staging_prepare.outputs.ttt }}
+          echo "$TTT"
