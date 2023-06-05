@@ -80,7 +80,7 @@ jobs:
       group: staging
       cancel-in-progress: false
     steps:
-      - name: Staging deploy $TTT 🚗
+      - name: Staging deploy ${{needs.staging_prepare.outputs.ttt}} 🚗
         env:
           TTT: ${{needs.staging_prepare.outputs.ttt}}
         run: |
