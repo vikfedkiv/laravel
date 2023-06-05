@@ -46,12 +46,10 @@ jobs:
       cancel-in-progress: false
     needs: [staging_frontend_build, staging_container_build]
     steps:
-      - name: Staging Deploy ${{ env.COMMIT_VAR }} 🚗
-        env:
-          COMMIT_VAR: ${{ env.action_state }}
+      - name: Staging Deploy ${{ env.action_state }} 🚗
         run: |
           echo "Staging Deploy."
-          echo $COMMIT_VAR
+          echo "${{ env.action_state }}"
   staging_tests:
     uses: ./.github/workflows/ci.yml
     needs: [staging_deploy]
