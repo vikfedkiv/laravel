@@ -41,6 +41,7 @@ jobs:
         id: staging_container_build
         run: |
           echo "Staging container build."
+          echo "new_tag=v1.2.3" >> "$GITHUB_OUTPUT"
   staging_deploy:
     runs-on: self-hosted
     concurrency:
