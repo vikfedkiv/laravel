@@ -73,6 +73,7 @@ jobs:
           echo "ttt=lalala" >> $GITHUB_OUTPUT
   staging_deploy:
     runs-on: self-hosted
+    needs: [staging_prepare]
     concurrency:
       group: staging
       cancel-in-progress: false
