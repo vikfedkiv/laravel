@@ -5,104 +5,104 @@ on:
     branches: [ master ]
 
 jobs:
-  # staging_prepare:
-  #   runs-on: self-hosted
-  #   concurrency:
-  #     group: staging_incr_version
-  #     cancel-in-progress: false
-  #   outputs:
-  #     ttt: ${{ steps.vars.outputs.ttt }}
-  #   if: contains(vars.ALLOWED_USERS, github.actor)
-  #   steps:
-  #     - name: Checkout 👀
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #         lfs: false
-  #     - name: Staging prepare 🚗
-  #       id: vars
-  #       run: |
-  #         echo "Staging prepare."
-  #         LATEST_TAG=$( git describe --tags --abbrev=0 )
-  #         NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
-  #         git tag $NEW_TAG
-  #         git push origin $NEW_TAG
-  #         echo "ttt=lalala" >> "$GITHUB_OUTPUT"
-  # staging_frontend_build:
-  #   runs-on: self-hosted
-  #   needs: [staging_prepare]
-  #   steps:
-  #     - name: Staging FrontEnd Build 🚗
-  #       run: |
-  #         echo "Staging FrontEnd build."
-  # staging_container_build:
-  #   runs-on: self-hosted
-  #   needs: [staging_prepare]
-  #   steps:
-  #     - name: Staging Container Build 🚗
-  #       run: |
-  #         echo "Staging container build."
-  # staging_deploy:
-  #   runs-on: self-hosted
-  #   concurrency:
-  #     group: staging
-  #     cancel-in-progress: false
-  #   needs: [staging_frontend_build, staging_container_build]
-  #   steps:
-  #     - name: Staging Deploy ${{needs.staging_prepare.outputs.ttt}} 🚗
-  #       env:
-  #         NEW_TAG: ${{needs.staging_prepare.outputs.ttt}}
-  #       run: |
-  #         echo "Staging Deploy."
-  # staging_tests:
-  #   uses: ./.github/workflows/ci.yml
-  #   needs: [staging_deploy]
-  # e2e_cypress_staging:
-  #   runs-on: self-hosted
-  #   concurrency:
-  #     group: staging
-  #     cancel-in-progress: false
-  #   needs: [staging_deploy]
-  #   steps:
-  #     - name: E2E Staging Cypress tests 🚗
-  #       run: |
-  #         echo "Staging e2e_cypress tests...."
   staging_prepare:
     runs-on: self-hosted
     concurrency:
       group: staging_incr_version
       cancel-in-progress: false
+    if: contains(vars.ALLOWED_USERS, github.actor)
     steps:
+      - name: Checkout 👀
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: false
       - name: Staging prepare 🚗
         run: |
-          echo "staging_prepare"
+          echo "Staging prepare."
+          LATEST_TAG=$( git describe --tags --abbrev=0 )
+          NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
   staging_frontend_build:
     runs-on: self-hosted
     needs: [staging_prepare]
     steps:
-      - name: Staging prepare 🚗
+      - name: Staging FrontEnd Build 🚗
         run: |
-          echo "staging_frontend_build"
-  staging_containers_build:
+          echo "Staging FrontEnd build."
+  staging_container_build:
     runs-on: self-hosted
     needs: [staging_prepare]
     outputs:
-      ttt: ${{ steps.vars.outputs.ttt }}
+      new_tag: ${{ steps.staging_container_build.outputs.new_tag }}
     steps:
-      - name: Staging prepare 🚗
-        id: vars
+      - name: Staging Container Build 🚗
+        id: staging_container_build
         run: |
-          echo "get from vault"
-          echo "ttt=lalala" >> "$GITHUB_OUTPUT"
+          echo "Staging container build."
   staging_deploy:
     runs-on: self-hosted
-    needs: [staging_frontend_build, staging_containers_build]
     concurrency:
       group: staging
       cancel-in-progress: false
+    needs: [staging_frontend_build, staging_container_build]
     steps:
-      - name: Staging deploy ${{needs.staging_containers_build.outputs.ttt}} 🚗
+      - name: Staging Deploy ${{needs.staging_containers_build.outputs.new_tag}} 🚗
         env:
-          TTT: ${{needs.staging_containers_build.outputs.ttt}}
+          NEW_TAG: ${{needs.staging_containers_build.outputs.new_tag}}
         run: |
-          echo "$TTT"
+          echo "Staging Deploy."
+          echo "$NEW_TAG"
+  staging_tests:
+    uses: ./.github/workflows/ci.yml
+    needs: [staging_deploy]
+  e2e_cypress_staging:
+    runs-on: self-hosted
+    concurrency:
+      group: staging
+      cancel-in-progress: false
+    needs: [staging_deploy]
+    steps:
+      - name: E2E Staging Cypress tests 🚗
+        run: |
+          echo "Staging e2e_cypress tests...."
+  # staging_prepare:
+  #   runs-on: self-hosted
+  #   concurrency:
+  #     group: staging_incr_version
+  #     cancel-in-progress: false
+  #   steps:
+  #     - name: Staging prepare 🚗
+  #       run: |
+  #         echo "staging_prepare"
+  # staging_frontend_build:
+  #   runs-on: self-hosted
+  #   needs: [staging_prepare]
+  #   steps:
+  #     - name: Staging prepare 🚗
+  #       run: |
+  #         echo "staging_frontend_build"
+  # staging_containers_build:
+  #   runs-on: self-hosted
+  #   needs: [staging_prepare]
+  #   outputs:
+  #     ttt: ${{ steps.vars.outputs.ttt }}
+  #   steps:
+  #     - name: Staging prepare 🚗
+  #       id: vars
+  #       run: |
+  #         echo "get from vault"
+  #         echo "ttt=lalala" >> "$GITHUB_OUTPUT"
+  # staging_deploy:
+  #   runs-on: self-hosted
+  #   needs: [staging_frontend_build, staging_containers_build]
+  #   concurrency:
+  #     group: staging
+  #     cancel-in-progress: false
+  #   steps:
+  #     - name: Staging deploy ${{needs.staging_containers_build.outputs.ttt}} 🚗
+  #       env:
+  #         TTT: ${{needs.staging_containers_build.outputs.ttt}}
+  #       run: |
+  #         echo "$TTT"
