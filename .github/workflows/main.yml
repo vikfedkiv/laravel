@@ -46,7 +46,9 @@ jobs:
       cancel-in-progress: false
     needs: [staging_frontend_build, staging_container_build]
     steps:
-      - name: Staging Deploy ${{ env.action_state }} 🚗
+      - name: Staging Deploy ${{ env.COMMIT_VAR }} 🚗
+        env:
+          COMMIT_VAR: ${{ env.action_state }}
         run: |
           echo "Staging Deploy."
   staging_tests:
