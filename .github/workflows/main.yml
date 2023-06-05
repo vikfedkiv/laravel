@@ -70,7 +70,8 @@ jobs:
       - name: Staging prepare 🚗
         id: vars
         run: |
-          echo "ttt=lalala" >> $GITHUB_OUTPUT
+          echo "ttt=lalala" >> $GITHUB_ENV
+          echo "::set-output name=ttt::lalala"
   staging_deploy:
     runs-on: self-hosted
     needs: [staging_prepare]
@@ -80,4 +81,4 @@ jobs:
     steps:
       - name: Staging deploy 🚗
         run: |
-          echo ${{ steps.vars.outputs.ttt }}
+          echo ${{ needs.staging_prepare.outputs.ttt }}
