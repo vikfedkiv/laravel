@@ -23,6 +23,7 @@ jobs:
       - name: Prepare 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
+            echo "Branch is ${{ github.ref }}"
   build_frontned:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'update' }}
