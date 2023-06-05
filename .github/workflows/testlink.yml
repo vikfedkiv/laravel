@@ -1,4 +1,4 @@
-name: Test link deployment for ${{ github.ref_name }}
+name: Test link deployment
 
 on:
   workflow_dispatch:
@@ -15,12 +15,15 @@ on:
     branches:
       - 'testlink/**'
 
+env:
+  TESTLINK_NAME: ${{ github.ref_name }}
+
 jobs:
   prepare:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'update' }}
     steps:
-      - name: Prepare 🚗
+      - name: Prepare ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
             echo "Branch is ${{ github.ref_name }}"
@@ -29,7 +32,7 @@ jobs:
     if: ${{ github.event.inputs.action == 'update' }}
     needs: [prepare]
     steps:
-      - name: Build FrontEnd 🚗
+      - name: Build FrontEnd ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   build_containers:
@@ -37,7 +40,7 @@ jobs:
     if: ${{ github.event.inputs.action == 'update' }}
     needs: [prepare]
     steps:
-      - name: Build Containers 🚗
+      - name: Build Containers ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   deploy:
@@ -45,20 +48,20 @@ jobs:
     if: ${{ github.event.inputs.action == 'update' }}
     needs: [build_frontned, build_containers]
     steps:
-      - name: Deploy 🚗
+      - name: Deploy ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   create:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'create' }}
     steps:
-      - name: Create 🚗
+      - name: Create ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   destroy:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'destroy' }}
     steps:
-      - name: Destroy 🚗
+      - name: Destroy ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
