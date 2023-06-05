@@ -16,9 +16,45 @@ on:
       - 'testlink/**'
 
 jobs:
-  staging_prepare:
+  prepare:
     runs-on: self-hosted
+    if: ${{ github.event.inputs.action == 'update' }}
     steps:
-      - name: Staging prepare 🚗
+      - name: Prepare 🚗
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  build_frontned:
+    runs-on: self-hosted
+    if: ${{ github.event.inputs.action == 'update' }}
+    steps:
+      - name: Build FrontEnd 🚗
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  build_containers:
+    runs-on: self-hosted
+    if: ${{ github.event.inputs.action == 'update' }}
+    steps:
+      - name: Build Containers 🚗
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  deploy:
+    runs-on: self-hosted
+    if: ${{ github.event.inputs.action == 'update' }}
+    steps:
+      - name: Deploy 🚗
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  create:
+    runs-on: self-hosted
+    if: ${{ github.event.inputs.action == 'create' }}
+    steps:
+      - name: Create 🚗
+        run: |
+            echo "Actions is ${{ github.event.inputs.action }}"
+  destroy:
+    runs-on: self-hosted
+    if: ${{ github.event.inputs.action == 'destroy' }}
+    steps:
+      - name: Destroy 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
