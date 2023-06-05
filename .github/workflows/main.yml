@@ -81,6 +81,7 @@ jobs:
           echo "ttt=lalala" >> "$GITHUB_OUTPUT"
   staging_frontend_build:
     runs-on: self-hosted
+    needs: [staging_prepare]
     concurrency:
       group: staging_incr_version
       cancel-in-progress: false
@@ -91,6 +92,7 @@ jobs:
           echo "staging_frontend_build"
   staging_containers_build:
     runs-on: self-hosted
+    needs: [staging_prepare]
     concurrency:
       group: staging_incr_version
       cancel-in-progress: false
