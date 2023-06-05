@@ -68,10 +68,9 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Staging prepare 🚗
+        id: vars
         run: |
-          echo "TTT=lalala" >> $GITHUB_ENV
+          echo "ttt=lalala" >> $GITHUB_OUTPUT
       - name: Staging deploy 🚗
         run: |
-          echo "$TTT"
-        with:
-          title: ${{ env.TTT }}
+          echo ${{ steps.vars.outputs.ttt }}
