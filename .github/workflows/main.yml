@@ -71,6 +71,12 @@ jobs:
         id: vars
         run: |
           echo "ttt=lalala" >> $GITHUB_OUTPUT
+  staging_deploy:
+    runs-on: self-hosted
+    concurrency:
+      group: staging
+      cancel-in-progress: false
+    steps:
       - name: Staging deploy 🚗
         run: |
           echo ${{ steps.vars.outputs.ttt }}
