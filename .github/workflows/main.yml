@@ -35,13 +35,13 @@ jobs:
     runs-on: self-hosted
     needs: [staging_prepare]
     outputs:
-      ttt: ${{ steps.vars.outputs.ttt }}
+      new_tag: ${{ steps.staging_containers_build.outputs.new_tag }}
     steps:
       - name: Staging Container Build 🚗
-        id: vars
+        id: staging_containers_build
         run: |
           echo "Staging container build."
-          echo "ttt=v1.2.3" >> "$GITHUB_OUTPUT"
+          echo "new_tag=v1.2.3" >> "$GITHUB_OUTPUT"
   staging_deploy:
     runs-on: self-hosted
     concurrency:
@@ -49,12 +49,12 @@ jobs:
       cancel-in-progress: false
     needs: [staging_frontend_build, staging_containers_build]
     steps:
-      - name: Staging Deploy ${{needs.staging_containers_build.outputs.ttt}} 🚗
+      - name: Staging Deploy with ${{needs.staging_containers_build.outputs.new_tag}} tag 🚗
         env:
-          TTT: ${{needs.staging_containers_build.outputs.ttt}}
+          NEW_TAG: ${{needs.staging_containers_build.outputs.new_tag}}
         run: |
           echo "Staging Deploy."
-          echo "$TTT"
+          echo "$NEW_TAG"
   staging_tests:
     uses: ./.github/workflows/ci.yml
     needs: [staging_deploy]
