@@ -26,6 +26,7 @@ jobs:
   build_frontned:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'update' }}
+    needs: [prepare]
     steps:
       - name: Build FrontEnd 🚗
         run: |
@@ -33,6 +34,7 @@ jobs:
   build_containers:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'update' }}
+    needs: [prepare]
     steps:
       - name: Build Containers 🚗
         run: |
@@ -40,6 +42,7 @@ jobs:
   deploy:
     runs-on: self-hosted
     if: ${{ github.event.inputs.action == 'update' }}
+    needs: [build_frontned, build_containers]
     steps:
       - name: Deploy 🚗
         run: |
