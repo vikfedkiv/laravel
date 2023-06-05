@@ -72,35 +72,28 @@ jobs:
     concurrency:
       group: staging_incr_version
       cancel-in-progress: false
+    steps:
+      - name: Staging prepare 🚗
+        run: |
+          echo "staging_prepare"
+  staging_frontend_build:
+    runs-on: self-hosted
+    needs: [staging_prepare]
+    steps:
+      - name: Staging prepare 🚗
+        run: |
+          echo "staging_frontend_build"
+  staging_containers_build:
+    runs-on: self-hosted
+    needs: [staging_prepare]
     outputs:
       ttt: ${{ steps.vars.outputs.ttt }}
     steps:
       - name: Staging prepare 🚗
         id: vars
         run: |
+          echo "get from vault"
           echo "ttt=lalala" >> "$GITHUB_OUTPUT"
-  staging_frontend_build:
-    runs-on: self-hosted
-    needs: [staging_prepare]
-    concurrency:
-      group: staging_incr_version
-      cancel-in-progress: false
-    steps:
-      - name: Staging prepare 🚗
-        id: vars
-        run: |
-          echo "staging_frontend_build"
-  staging_containers_build:
-    runs-on: self-hosted
-    needs: [staging_prepare]
-    concurrency:
-      group: staging_incr_version
-      cancel-in-progress: false
-    steps:
-      - name: Staging prepare 🚗
-        id: vars
-        run: |
-          echo "staging_containers_build"
   staging_deploy:
     runs-on: self-hosted
     needs: [staging_frontend_build, staging_containers_build]
@@ -108,8 +101,8 @@ jobs:
       group: staging
       cancel-in-progress: false
     steps:
-      - name: Staging deploy ${{needs.staging_prepare.outputs.ttt}} 🚗
+      - name: Staging deploy ${{needs.staging_containers_build.outputs.ttt}} 🚗
         env:
-          TTT: ${{needs.staging_prepare.outputs.ttt}}
+          TTT: ${{needs.staging_containers_build.outputs.ttt}}
         run: |
           echo "$TTT"
