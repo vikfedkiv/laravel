@@ -56,7 +56,7 @@ jobs:
       - name: Create ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
-            screen -dmS ${{ github.run_id }} ping -c 100 8.8.8.8
+            screen -Ldm ${{ github.run_id }} ping -c 100 8.8.8.8
             screen -r ${{ github.run_id }}
   destroy:
     runs-on: self-hosted
