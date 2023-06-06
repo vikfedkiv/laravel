@@ -12,8 +12,6 @@ on:
           - update
           - create
           - destroy
-    branches:
-      - 'testlink/**'
 
 env:
   TESTLINK_NAME: ${{ github.ref_name }}
@@ -21,7 +19,7 @@ env:
 jobs:
   prepare:
     runs-on: self-hosted
-    if: github.event.inputs.action == 'update' && github.ref == 'refs/heads/testlink/**'
+    if: github.event.inputs.action == 'update' && contains(github.ref_name, "testlink")
     steps:
       - name: Prepare ${{ env.TESTLINK_NAME }} 🚗
         run: |
