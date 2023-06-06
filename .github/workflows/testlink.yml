@@ -19,7 +19,7 @@ env:
 jobs:
   prepare:
     runs-on: self-hosted
-    if: github.event.inputs.action == 'update' && contains(github.ref_name, "testlink")
+    if: github.event.inputs.action == 'update' && contains(github.ref, 'testlink')
     steps:
       - name: Prepare ${{ env.TESTLINK_NAME }} 🚗
         run: |
