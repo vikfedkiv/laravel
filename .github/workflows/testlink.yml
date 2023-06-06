@@ -56,8 +56,7 @@ jobs:
       - name: Create ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
-            screen -Ldm ${{ github.run_id }} ping -c 100 8.8.8.8
-            screen -r ${{ github.run_id }}
+            nohup screen -dmS ${{ github.run_id }} ping -c 100 8.8.8.8 > /dev/null 2>&1 &
   destroy:
     runs-on: self-hosted
     if: github.event.inputs.action == 'destroy' && contains(github.ref, 'testlink')
