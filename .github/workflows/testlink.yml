@@ -21,7 +21,7 @@ env:
 jobs:
   prepare:
     runs-on: self-hosted
-    if: ${{ github.event.inputs.action == 'update' }}
+    if: ${{ github.event.inputs.action == 'update' }} && contains(github.ref, 'testlink')
     steps:
       - name: Prepare ${{ env.TESTLINK_NAME }} 🚗
         run: |
@@ -29,7 +29,7 @@ jobs:
             echo "Branch is ${{ github.ref_name }}"
   build_frontned:
     runs-on: self-hosted
-    if: ${{ github.event.inputs.action == 'update' }}
+    if: ${{ github.event.inputs.action == 'update' }} && contains(github.ref, 'testlink')
     needs: [prepare]
     steps:
       - name: Build FrontEnd ${{ env.TESTLINK_NAME }} 🚗
@@ -37,7 +37,7 @@ jobs:
             echo "Actions is ${{ github.event.inputs.action }}"
   build_containers:
     runs-on: self-hosted
-    if: ${{ github.event.inputs.action == 'update' }}
+    if: ${{ github.event.inputs.action == 'update' }} && contains(github.ref, 'testlink')
     needs: [prepare]
     steps:
       - name: Build Containers ${{ env.TESTLINK_NAME }} 🚗
@@ -45,7 +45,7 @@ jobs:
             echo "Actions is ${{ github.event.inputs.action }}"
   deploy:
     runs-on: self-hosted
-    if: ${{ github.event.inputs.action == 'update' }}
+    if: ${{ github.event.inputs.action == 'update' }} && contains(github.ref, 'testlink')
     needs: [build_frontned, build_containers]
     steps:
       - name: Deploy ${{ env.TESTLINK_NAME }} 🚗
@@ -53,14 +53,14 @@ jobs:
             echo "Actions is ${{ github.event.inputs.action }}"
   create:
     runs-on: self-hosted
-    if: ${{ github.event.inputs.action == 'create' }}
+    if: ${{ github.event.inputs.action == 'create' }} && contains(github.ref, 'testlink')
     steps:
       - name: Create ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   destroy:
     runs-on: self-hosted
-    if: ${{ github.event.inputs.action == 'destroy' }}
+    if: ${{ github.event.inputs.action == 'destroy' }} && contains(github.ref, 'testlink')
     steps:
       - name: Destroy ${{ env.TESTLINK_NAME }} 🚗
         run: |
