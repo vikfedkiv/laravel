@@ -28,7 +28,7 @@ jobs:
           NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
           git tag $NEW_TAG
           git push origin $NEW_TAG
-          echo "new_tag=v1.2.3" >> "$GITHUB_OUTPUT"
+          echo "new_tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
   staging_frontend_build:
     name: Build FrontEnd
     runs-on: self-hosted
