@@ -87,7 +87,7 @@ jobs:
     steps:
       - name: Staging prepare 🚗
         env:
-          TTT: ${{needs.staging_containers_build.outputs.ttt}}
+          TTT: ${{needs.staging_prepare.outputs.ttt}}
         run: |
           echo "staging_frontend_build"
           echo "$TTT"
@@ -97,7 +97,7 @@ jobs:
     steps:
       - name: Staging prepare 🚗
         env:
-          TTT: ${{needs.staging_containers_build.outputs.ttt}}
+          TTT: ${{needs.staging_prepare.outputs.ttt}}
         run: |
           echo "get from vault"
           echo "$TTT"
@@ -108,8 +108,8 @@ jobs:
       group: staging
       cancel-in-progress: false
     steps:
-      - name: Staging deploy ${{needs.staging_containers_build.outputs.ttt}} 🚗
+      - name: Staging deploy ${{needs.staging_prepare.outputs.ttt}} 🚗
         env:
-          TTT: ${{needs.staging_containers_build.outputs.ttt}}
+          TTT: ${{needs.staging_prepare.outputs.ttt}}
         run: |
           echo "$TTT"
