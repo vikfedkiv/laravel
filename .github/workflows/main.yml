@@ -103,6 +103,7 @@ jobs:
           echo "$TTT"
   staging_deploy:
     runs-on: self-hosted
+    name: Staging deploy ${{needs.staging_prepare.outputs.ttt}}
     needs: [staging_prepare, staging_frontend_build, staging_containers_build]
     concurrency:
       group: staging
