@@ -56,8 +56,6 @@ jobs:
       - name: Create ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
-            sudo -H -u tenantcloud bash -c 'screen -dmS 123 ping -c 50 8.8.8.8'
-            sudo -H -u tenantcloud bash -c 'screen -r 123'
   destroy:
     runs-on: self-hosted
     if: github.event.inputs.action == 'destroy' && contains(github.ref, 'testlink')
