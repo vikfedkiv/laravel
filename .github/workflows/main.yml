@@ -7,6 +7,7 @@ on:
 jobs:
   staging_prepare:
     name: Staging prepare
+    environment: staging
     runs-on: self-hosted
     outputs:
       new_tag: ${{ steps.staging_prepare.outputs.new_tag }}
@@ -24,6 +25,7 @@ jobs:
         id: staging_prepare
         run: |
           echo "Staging prepare."
+          echo ${{ vars.AWS_ACCESS_KEY_ID }}
           LATEST_TAG=$( git describe --tags --abbrev=0 )
           NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
           git tag $NEW_TAG
@@ -31,6 +33,7 @@ jobs:
           echo "new_tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
   staging_frontend_build:
     name: Build FrontEnd
+    environment: staging
     runs-on: self-hosted
     needs: [staging_prepare]
     steps:
@@ -42,6 +45,7 @@ jobs:
           echo "$NEW_TAG"
   staging_containers_build:
     name: Build Containers
+    environment: staging
     runs-on: self-hosted
     needs: [staging_prepare]
     steps:
@@ -53,6 +57,9 @@ jobs:
           echo "$NEW_TAG"
   staging_deploy:
     name: Deploy with ${{needs.staging_prepare.outputs.new_tag}} tag
+    environment: 
+      name: staging
+      url: https://google.com
     runs-on: self-hosted
     concurrency:
       group: staging
