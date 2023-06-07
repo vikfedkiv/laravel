@@ -7,6 +7,30 @@ on:
 jobs:
   production_prepare:
     runs-on: self-hosted
+    environment: production
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    steps:
+      - name: Checkout 👀
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 10
+          lfs: false
+      - name: Production prepare 🚗
+        run: |
+            echo ${{ secrets.AWS_ACCESS_KEY_ID }}
+            TTT=$( echo ${{ github.ref_name }} )
+            echo $TTT
+            cat test.txt
+            BBB=$( echo ${{ github.actor }} )
+            echo $BBB
+  production_deploy:
+    runs-on: self-hosted
+    environment: 
+      name: production
+      url: https://navi.gg
+    needs: [production_prepare]
     concurrency:
       group: production
       cancel-in-progress: false
