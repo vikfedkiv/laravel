@@ -25,7 +25,7 @@ jobs:
         id: staging_prepare
         run: |
           echo "Staging prepare."
-          echo ${{ secrets.AWS_ACCESS_KEY_ID }}
+          echo ${{ vars.AWS_ACCESS_KEY_ID }}
           LATEST_TAG=$( git describe --tags --abbrev=0 )
           NEW_TAG=$(echo $LATEST_TAG | awk -F '.' '{ print $1 "." $2 "." $3+1 }')
           git tag $NEW_TAG

@@ -19,7 +19,7 @@ jobs:
           lfs: false
       - name: Production prepare 🚗
         run: |
-            echo ${{ secrets.AWS_ACCESS_KEY_ID }}
+            echo ${{ vars.AWS_ACCESS_KEY_ID }}
             TTT=$( echo ${{ github.ref_name }} )
             echo $TTT
             cat test.txt
