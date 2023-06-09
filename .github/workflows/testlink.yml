@@ -16,6 +16,14 @@ on:
           - update
           - create
           - destroy
+      database:
+        description: 'Database type'
+        required: true
+        default: 'clean'
+        type: choice
+        options:
+          - clean
+          - sanitize
 
 env:
   TESTLINK_NAME: ${{ github.event.inputs.name }}
@@ -61,6 +69,10 @@ jobs:
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
             echo ${{ vars.AWS_ACCESS_KEY_ID }}
+            if [[ "${{ github.event.inputs.database }}" == "sanitize" ]]; then
+              export TF_VAR_prod_db="true"
+            fi
+            echo $TF_VAR_prod_db
   destroy:
     runs-on: self-hosted
     if: github.event.inputs.action == 'destroy' && github.ref != 'refs/heads/master'
