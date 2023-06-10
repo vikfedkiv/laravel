@@ -30,6 +30,8 @@ env:
 
 jobs:
   prepare:
+    name: Prepare ${{ github.event.inputs.name }}
+    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     steps:
@@ -38,6 +40,8 @@ jobs:
             echo "Actions is ${{ github.event.inputs.action }}"
             echo "Branch is ${{ github.ref_name }}"
   build_frontned:
+    name: Build FrontEnd ${{ github.event.inputs.name }}
+    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     needs: [prepare]
@@ -46,6 +50,8 @@ jobs:
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   build_containers:
+    name: Build Containers ${{ github.event.inputs.name }}
+    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     needs: [prepare]
@@ -54,6 +60,8 @@ jobs:
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   deploy:
+    name: Deploy ${{ github.event.inputs.name }}
+    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     needs: [build_frontned, build_containers]
@@ -62,6 +70,8 @@ jobs:
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
   create:
+    name: Create ${{ github.event.inputs.name }}
+    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'create' && github.ref != 'refs/heads/master'
     steps:
@@ -74,6 +84,8 @@ jobs:
             fi
             echo $TF_VAR_prod_db
   destroy:
+    name: Destroy ${{ github.event.inputs.name }}
+    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'destroy' && github.ref != 'refs/heads/master'
     steps:
