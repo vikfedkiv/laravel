@@ -27,6 +27,7 @@ on:
 
 env:
   TESTLINK_NAME: ${{ github.event.inputs.name }}
+  REPO_NAME: ${{ github.event.repository.name }}
 
 jobs:
   prepare:
@@ -38,6 +39,7 @@ jobs:
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
             echo "Branch is ${{ github.ref_name }}"
+            echo "lalala $REPO_NAME"
   build_frontned:
     name: Build FrontEnd ${{ github.event.inputs.name }}
     runs-on: self-hosted
