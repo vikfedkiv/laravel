@@ -63,6 +63,11 @@ jobs:
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     needs: [build_frontned, build_containers]
     steps:
+      - name: Checkout 👀
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          lfs: true
       - name: Deploy ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
