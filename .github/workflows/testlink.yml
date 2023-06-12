@@ -31,7 +31,6 @@ env:
 jobs:
   prepare:
     name: Prepare ${{ github.event.inputs.name }}
-    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     steps:
@@ -41,7 +40,6 @@ jobs:
             echo "Branch is ${{ github.ref_name }}"
   build_frontned:
     name: Build FrontEnd ${{ github.event.inputs.name }}
-    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     needs: [prepare]
@@ -51,7 +49,6 @@ jobs:
             echo "Actions is ${{ github.event.inputs.action }}"
   build_containers:
     name: Build Containers ${{ github.event.inputs.name }}
-    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'update' && github.ref != 'refs/heads/master'
     needs: [prepare]
@@ -69,6 +66,7 @@ jobs:
       - name: Deploy ${{ env.TESTLINK_NAME }} 🚗
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
+            sh/pipeline/merge_pull_request.sh
   create:
     name: Create ${{ github.event.inputs.name }}
     environment: ${{ github.event.inputs.name }}
@@ -85,7 +83,6 @@ jobs:
             echo $TF_VAR_prod_db
   destroy:
     name: Destroy ${{ github.event.inputs.name }}
-    environment: ${{ github.event.inputs.name }}
     runs-on: self-hosted
     if: github.event.inputs.action == 'destroy' && github.ref != 'refs/heads/master'
     steps:
