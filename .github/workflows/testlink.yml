@@ -28,7 +28,7 @@ on:
 env:
   TESTLINK_NAME: ${{ github.event.inputs.name }}
   REPOSITORY_NAME: ${{ github.repository }}
-  PARSED_NAME: "${REPOSITORY_NAME##*/}"
+  PARSED_NAME: "${{env.REPOSITORY_NAME##*/}}"
 
 jobs:
   prepare:
