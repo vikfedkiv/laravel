@@ -27,8 +27,6 @@ on:
 
 env:
   TESTLINK_NAME: ${{ github.event.inputs.name }}
-  REPOSITORY_NAME: ${{ github.repository }}
-  PARSED_NAME: "${{env.REPOSITORY_NAME##*/}}"
 
 jobs:
   prepare:
@@ -40,7 +38,6 @@ jobs:
         run: |
             echo "Actions is ${{ github.event.inputs.action }}"
             echo "Branch is ${{ github.ref_name }}"
-            echo "$PARSED_NAME"
   build_frontned:
     name: Build FrontEnd ${{ github.event.inputs.name }}
     runs-on: self-hosted
