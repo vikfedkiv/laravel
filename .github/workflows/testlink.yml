@@ -77,7 +77,7 @@ jobs:
   create:
     name: Create ${{ github.event.inputs.name }}
     environment: ${{ github.event.inputs.name }}
-    runs-on: self-hosted
+    runs-on: ${{ vars.PIPELINE_TESTS_TAG }}
     if: github.event.inputs.action == 'create' && github.ref != 'refs/heads/master'
     steps:
       - name: Create ${{ env.TESTLINK_NAME }} 🚗
