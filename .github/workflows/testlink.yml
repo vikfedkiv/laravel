@@ -79,6 +79,12 @@ jobs:
     environment: ${{ github.event.inputs.name }}
     runs-on: ${{ vars.PIPELINE_TESTS_TAG }}
     if: github.event.inputs.action == 'create' && github.ref != 'refs/heads/master'
+    env:
+      CI_NODE_INDEX: ${{ matrix.parallel }}
+    strategy:
+      matrix:
+        parallel: [1, 2, 3, 4]
+      fail-fast: false
     steps:
       - name: Create ${{ env.TESTLINK_NAME }} 🚗
         run: |
@@ -88,6 +94,7 @@ jobs:
               export TF_VAR_prod_db="true"
             fi
             echo $TF_VAR_prod_db
+            echo $CI_NODE_INDEX
   destroy:
     name: Destroy ${{ github.event.inputs.name }}
     runs-on: self-hosted
