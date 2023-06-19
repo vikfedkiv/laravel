@@ -82,6 +82,7 @@ jobs:
           echo "Staging Deploy."
           echo "$NEW_TAG"
           sh/pipeline/check_for_parallel_merge.sh
+          echo "run next commands"
   staging_tests:
     uses: ./.github/workflows/ci.yml
     needs: [staging_deploy]
