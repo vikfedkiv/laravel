@@ -4,6 +4,15 @@ on:
   push:
     branches: [ master ]
 
+defaults:
+  run:
+    shell: bash
+
+env:
+  CI_GITHUB_API_TOKEN: ${{ secrets.CI_GITHUB_API_TOKEN }}
+  CI_PIPELINE_ID: ${{ github.run_id }}
+  CI_GITHUB_REPOSITORY: ${{ github.repository }}
+
 jobs:
   staging_prepare:
     name: Staging prepare
@@ -72,6 +81,7 @@ jobs:
         run: |
           echo "Staging Deploy."
           echo "$NEW_TAG"
+          sh/pipeline/check_for_parallel_merge.sh
   staging_tests:
     uses: ./.github/workflows/ci.yml
     needs: [staging_deploy]
