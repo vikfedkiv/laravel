@@ -15,7 +15,8 @@ jobs:
     steps:
       - name: Tests 🚗
         run: |
-            echo "Run tests"
+            echo "Run tests."
+            sleep 100500
   frontend_test:
     runs-on: pipeline
     steps:
