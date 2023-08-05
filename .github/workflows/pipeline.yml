@@ -139,8 +139,8 @@ jobs:
       - name: Backend test 🚗
         run: |
             echo "Run Backend test"
-            echo ${{ (github.event_name }}
-            echo ${{ github.event.action }}
+            echo "event name is:" ${{ github.event_name }}
+            echo "event type is:" ${{ github.event.action }}
 
   frontend_build:
     runs-on: pipeline
