@@ -1,0 +1,57 @@
+name: Staging deployment
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'master'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  staging_prepare:
+    runs-on: self-hosted
+    if: contains(vars.ALLOWED_USERS, github.actor) && github.event.pull_request.merged == true && !startsWith(github.head_ref, 'nodeploy/')
+    steps:
+      - name: Staging prepare 🚗
+        run: |
+            echo "Staging preapre"
+  staging_frontend:
+    needs: [staging_prepare]
+    runs-on: self-hosted
+    steps:
+      - name: Staging frontend 🚗
+        run: |
+            echo "Staging frontend"
+  staging_containers:
+    needs: [staging_prepare]
+    runs-on: self-hosted
+    steps:
+      - name: Staging containers 🚗
+        run: |
+            echo "Staging containers"
+  staging_deploy:
+    runs-on: self-hosted
+    needs: [staging_prepare, staging_frontend, staging_containers]
+    steps:
+      - name: Staging deploy 🚗
+        run: |
+            echo "Staging deploy"
+
+  staging_tests:
+    needs: [staging_deploy]
+    if: always() && !cancelled() && github.event.pull_request.merged == true
+    uses: ./.github/workflows/pipeline.yml
+
+  e2e_cypress_staging:
+    runs-on: self-hosted
+    needs: [staging_deploy]
+    if: always() && !cancelled() && github.event.pull_request.merged == true
+    steps:
+      - name: E2E Cypress Staging 🚗
+        run: |
+            echo "E2E Cypress Staging"
+ 
