@@ -11,7 +11,7 @@ defaults:
     shell: bash
 
 # -------------------------------------------------
-# Concurrency rules........
+# Concurrency rules..........
 # -------------------------------------------------
 
 concurrency:
@@ -142,6 +142,7 @@ jobs:
             echo "Run Backend test"
             echo "event name is:" ${{ github.event_name }}
             echo "event type is:" ${{ github.event.action }}
+            sleep 60
 
   frontend_build:
     runs-on: pipeline
