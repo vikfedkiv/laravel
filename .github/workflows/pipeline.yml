@@ -140,7 +140,7 @@ jobs:
       - name: Backend test 🚗
         run: |
             echo "Run Backend test"
-            sleep 100
+            sleep 60
             echo "event name is:" ${{ github.event_name }}
             echo "event type is:" ${{ github.event.action }}
 
