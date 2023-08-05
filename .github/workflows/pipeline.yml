@@ -132,7 +132,7 @@ jobs:
     runs-on: pipeline
     needs: [changed_backend]
       #    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'schedule')
+    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (needs.changed_backend.result == 'skipped' && github.event_name == 'schedule')
     steps:
       - name: Checkout
         run: |
@@ -140,7 +140,7 @@ jobs:
       - name: Backend test 🚗
         run: |
             echo "Run Backend test"
-            sleep 100500
+            sleep 100
             echo "event name is:" ${{ github.event_name }}
             echo "event type is:" ${{ github.event.action }}
 
@@ -148,7 +148,7 @@ jobs:
     runs-on: pipeline
     needs: [changed_general]
       #    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'schedule')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (needs.changed_general.result == 'skipped' && github.event_name == 'schedule')
     steps:
       - name: Checkout
         run: |
@@ -160,7 +160,7 @@ jobs:
   frontend_test:
     runs-on: pipeline
     needs: [changed_frontend]
-    if: (needs.changed_frontend.outputs.frontend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'schedule')
+    if: (needs.changed_frontend.outputs.frontend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (needs.changed_frontend.result == 'skipped' && github.event_name == 'schedule')
     steps:
       - name: Checkout
         run: |
@@ -172,7 +172,7 @@ jobs:
   e2e_cypress_prepare:
     runs-on: pipeline
     needs: [changed_general]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'schedule')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (needs.changed_general.result == 'skipped' && github.event_name == 'schedule')
     steps:
       - name: Checkout
         run: |
@@ -183,7 +183,7 @@ jobs:
 
   e2e_cypress:
     needs: [changed_general, e2e_cypress_prepare, frontend_build]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'schedule')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (needs.changed_general.result == 'skipped' && github.event_name == 'schedule')
     runs-on: pipeline
     steps:
       - name: Checkout
