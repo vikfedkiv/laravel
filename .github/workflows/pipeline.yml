@@ -131,7 +131,8 @@ jobs:
   backend_test:
     runs-on: pipeline
     needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+      #    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
     steps:
       - name: Checkout
         run: |
@@ -146,7 +147,8 @@ jobs:
   frontend_build:
     runs-on: pipeline
     needs: [changed_general]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+      #    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
       - name: Checkout
         run: |
@@ -158,7 +160,7 @@ jobs:
   frontend_test:
     runs-on: pipeline
     needs: [changed_frontend]
-    if: (needs.changed_frontend.outputs.frontend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+    if: (needs.changed_frontend.outputs.frontend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
     steps:
       - name: Checkout
         run: |
@@ -170,7 +172,7 @@ jobs:
   e2e_cypress_prepare:
     runs-on: pipeline
     needs: [changed_general]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
       - name: Checkout
         run: |
@@ -181,7 +183,7 @@ jobs:
 
   e2e_cypress:
     needs: [changed_general, e2e_cypress_prepare, frontend_build]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: pipeline
     steps:
       - name: Checkout
