@@ -132,7 +132,7 @@ jobs:
     runs-on: pipeline
     needs: [changed_backend]
       #    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (needs.changed_backend.result == 'skipped' && github.event_name == 'schedule')
+    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (needs.changed_backend.result == 'skipped')
     steps:
       - name: Checkout
         run: |
