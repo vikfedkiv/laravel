@@ -4,10 +4,28 @@ on:
   pull_request:
     branches: [ master ]
   workflow_call:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+# -------------------------------------------------
+# Concurrency rules
+# -------------------------------------------------
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+# -------------------------------------------------
+# Jobs
+# -------------------------------------------------
 
 jobs:
   changed_backend:
     runs-on: pipeline
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     outputs:
       backend_changed: ${{ steps.filter.outputs.backend }}
     steps:
@@ -23,13 +41,14 @@ jobs:
               - '**/*.php'
               - '**/*.sql'
               - '*.xml'
-              # - '*.yml'
+              - '**/*.yml'
               - '*.neon'
               - '**/*.sh'
               - 'devops/docker/*'
 
   changed_frontend:
     runs-on: pipeline
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     outputs:
       frontend_changed: ${{ steps.filter.outputs.frontend }}
       frontend_exclude: ${{ steps.filter.outputs.exclude }}
@@ -47,7 +66,7 @@ jobs:
               - '**/*.html'
               - '**/*.css'
               - '**/*.scss'
-              # - '*.yml'
+              - '**/*.yml'
               - '**/*.json'
               - '**/*.sh'
             exclude:
@@ -59,6 +78,7 @@ jobs:
 
   changed_e2e:
     runs-on: pipeline
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     outputs:
       e2e_changed: ${{ steps.filter.outputs.e2e }}
     steps:
@@ -79,6 +99,7 @@ jobs:
 
   changed_general:
     runs-on: pipeline
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     outputs:
       general_changed: ${{ steps.filter.outputs.general }}
     steps:
@@ -96,7 +117,7 @@ jobs:
               - '**/*.php'
               - '**/*.sql'
               - '*.xml'
-              # - '*.yml'
+              - '**/*.yml'
               - '**/*.sh'
               - '**/*.js'
               - 'resources/**/!(*.spec|*.po|*.host).ts'
@@ -110,7 +131,7 @@ jobs:
   backend_test:
     runs-on: pipeline
     needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
+    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
     steps:
       - name: Checkout
         run: |
@@ -119,82 +140,10 @@ jobs:
         run: |
             echo "Run Backend test"
 
-  backend_code_style:
-    runs-on: pipeline
-    needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Backend CodeStyle 🚗
-        run: |
-            echo "Run Backend test"
-
-  backend_phpstan:
-    needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    runs-on: pipeline
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Backend PHPStan 🚗
-        run: |
-            echo "Run Backend PHPStan"
-
-  backend_phpstan_update_fallback:
-    needs: [changed_backend, backend_phpstan]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    runs-on: pipeline
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Backend PHPStan fallback 🚗
-        run: |
-            echo "Run Backend PHPStan fallback"
-
-  backend_phpstan_highest:
-    needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    runs-on: pipeline
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Backend PHPStan highest 🚗
-        run: |
-            echo "Run Backend PHPStan highest"
-
-  backend_phpstan_highest_update_fallback:
-    needs: [changed_backend, backend_phpstan_highest]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    runs-on: pipeline
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Backend PHPStan highest fallback 🚗
-        run: |
-            echo "Run Backend PHPStan highest fallback"
-
-  code_quality:
-    runs-on: pipeline
-    needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Code Quality 🚗
-        run: |
-            echo "Run Code Quality"
-
   frontend_build:
     runs-on: pipeline
     needs: [changed_general]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
     steps:
       - name: Checkout
         run: |
@@ -206,7 +155,7 @@ jobs:
   frontend_test:
     runs-on: pipeline
     needs: [changed_frontend]
-    if: (needs.changed_frontend.outputs.frontend_changed == 'true' && needs.changed_frontend.outputs.frontend_exclude != 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
+    if: (needs.changed_frontend.outputs.frontend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
     steps:
       - name: Checkout
         run: |
@@ -215,22 +164,10 @@ jobs:
         run: |
             echo "Run Frontend test"
 
-  frontend_code_style:
-    runs-on: pipeline
-    needs: [changed_frontend]
-    if: (needs.changed_frontend.outputs.frontend_changed == 'true' && needs.changed_frontend.outputs.frontend_exclude != 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Frontend Code Style 🚗
-        run: |
-            echo "Run Frontend Code Style"
-
   e2e_cypress_prepare:
     runs-on: pipeline
     needs: [changed_general]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
     steps:
       - name: Checkout
         run: |
@@ -241,7 +178,7 @@ jobs:
 
   e2e_cypress:
     needs: [changed_general, e2e_cypress_prepare, frontend_build]
-    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: (needs.changed_general.outputs.general_changed == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed') || (always() && !cancelled() && github.event_name == 'workflow_dispatch')
     runs-on: pipeline
     steps:
       - name: Checkout
@@ -250,51 +187,3 @@ jobs:
       - name: E2E Cypress 🚗
         run: |
             echo "E2E Cypress"
-
-  cypress_code_style:
-    runs-on: pipeline
-    needs: [changed_e2e]
-    if: (needs.changed_e2e.outputs.e2e_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Cypress Code Style 🚗
-        run: |
-            echo "Run Cypress Code Style"
-
-  wdio_code_style:
-    runs-on: pipeline
-    needs: [changed_e2e]
-    if: (needs.changed_e2e.outputs.e2e_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Wdio Code Style 🚗
-        run: |
-            echo "Run Wdio Code Style"
-
-  backend_license_checker:
-    runs-on: pipeline
-    needs: [changed_backend]
-    if: (needs.changed_backend.outputs.backend_changed == 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Backend license checker 🚗
-        run: |
-            echo "Run Backend license checker"
-
-  frontend_license_checker:
-    runs-on: pipeline
-    needs: [changed_frontend]
-    if: (needs.changed_frontend.outputs.frontend_changed == 'true' && needs.changed_frontend.outputs.frontend_exclude != 'true') || (github.event_name == 'pull_request' && github.event.action == 'closed')
-    steps:
-      - name: Checkout
-        run: |
-            echo "Checkout"
-      - name: Frontend license checker 🚗
-        run: |
-            echo "Run Frontend license checker"
