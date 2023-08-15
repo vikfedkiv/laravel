@@ -12,4 +12,3 @@ jobs:
   swagger:
     if: github.event.schedule == '*/5 * * * *'
     uses: ./.github/workflows/pipeline.yml
-
